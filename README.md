@@ -59,6 +59,18 @@ MAIL_FROM_ADDRESS=hello@example.com
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
+## 7. Sail Setup
+###  Requirements
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running
+- WSL 2 enabled (if on Windows)
+- No native MySQL or Redis running on the same ports (Sail uses Docker ports)
+
+Start the application:
+```bash
+./vendor/bin/sail up -d
+```
+
 ## 8. Contributing
 
 - Please fork the repository and create a new branch for your feature or bugfix.
