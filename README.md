@@ -53,13 +53,7 @@ DB_PASSWORD=your_password
 php artisan migrate
 ```
 
-## 8. Install Redis
-```bash
-https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/
-```
-
-
-## 9. Mailtrap Setup
+## 8. Mailtrap Setup
 - Create a free account at https://mailtrap.io.
 - Create a new Inbox in the Mailtrap dashboard.
 - Copy the SMTP credentials (host, port, username, password).
@@ -78,7 +72,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 
 
-## 10. Contributing
+## 9. Contributing
 
 - Please fork the repository and create a new branch for your feature or bugfix.
 - All changes must be submitted through a pull request.
