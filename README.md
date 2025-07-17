@@ -9,19 +9,36 @@ git clone https://github.com/zijadDj/online-biblioteka.git
 cd online-biblioteka
 ```
 
-## 2.Install PHP Dependencies
+## 2. Install PHP Dependencies
 ```bash
 composer install
 ```
 
-## 3.Copy .env File & Generate App Key
+## 3. Copy .env File
 
 ```bash
 cp .env.example .env
+```
+
+## 4. Sail Setup
+###  Requirements
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running
+- WSL 2 enabled (if on Windows)
+- No native MySQL or Redis running on the same ports (Sail uses Docker ports)
+
+Start the application:
+```bash
+./vendor/bin/sail up -d
+```
+
+## 5. Generate App Key
+
+```bash
 php artisan key:generate
 ```
 
-## 4.Configure Database in .env
+## 6.Configure Database in .env
 ```bash
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -31,18 +48,18 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-## 5. Run Migrations
+## 7. Run Migrations
 ```bash
 php artisan migrate
 ```
 
-## 6. Install Redis
+## 8. Install Redis
 ```bash
 https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/
 ```
 
 
-## 7. Mailtrap Setup
+## 9. Mailtrap Setup
 - Create a free account at https://mailtrap.io.
 - Create a new Inbox in the Mailtrap dashboard.
 - Copy the SMTP credentials (host, port, username, password).
@@ -59,19 +76,9 @@ MAIL_FROM_ADDRESS=hello@example.com
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-## 7. Sail Setup
-###  Requirements
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running
-- WSL 2 enabled (if on Windows)
-- No native MySQL or Redis running on the same ports (Sail uses Docker ports)
 
-Start the application:
-```bash
-./vendor/bin/sail up -d
-```
-
-## 8. Contributing
+## 10. Contributing
 
 - Please fork the repository and create a new branch for your feature or bugfix.
 - All changes must be submitted through a pull request.
