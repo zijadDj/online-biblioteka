@@ -49,14 +49,19 @@ DB_PASSWORD=your_password
 ```
 
 ## 7. Run Migrations
-First enter the container:
+If you want to run migrations **outside** of the container:
+```bash
+./vendor/bin/sail artisan migrate
+
+```
+
+If you prefer to run migrations **inside** the container, first enter the container:
 ```bash
 docker exec -it online-biblioteka-laravel.test-1 bash
 ```
-
-Run migrations inside the container with:
+Then run the migrations:
 ```bash
-./vendor/bin/sail artisan migrate
+php artisan migrate
 ```
 Note:
 **Once inside the container, you can run all Laravel Artisan commands normally, just as you would on your local machine.**
