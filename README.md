@@ -35,7 +35,7 @@ Start the application:
 ## 5. Generate App Key
 
 ```bash
-php artisan key:generate
+./vendor/bin/sail artisan key:generate.
 ```
 
 ## 6.Configure Database in .env
@@ -49,8 +49,14 @@ DB_PASSWORD=your_password
 ```
 
 ## 7. Run Migrations
+First enter the container:
 ```bash
-php artisan migrate
+docker exec -it online-biblioteka-laravel.test-1 bash
+```
+
+Run migrations inside the container with:
+```bash
+./vendor/bin/sail artisan migrate
 ```
 
 ## 8. Mailtrap Setup
