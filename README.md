@@ -58,6 +58,8 @@ Run migrations inside the container with:
 ```bash
 ./vendor/bin/sail artisan migrate
 ```
+Note:
+**Once inside the container, you can run all Laravel Artisan commands normally, just as you would on your local machine.**
 
 ## 8. Mailtrap Setup
 - Create a free account at https://mailtrap.io.
