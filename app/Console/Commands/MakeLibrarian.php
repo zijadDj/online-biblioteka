@@ -29,6 +29,7 @@ class MakeLibrarian extends Command
         $name = $this->ask('Enter your first name:');
         $surname = $this->ask('Enter your surname:');
         $email = $this->ask('Enter your email address:');
+        $password = $this->ask('Enter your password:');
         $jmbg = $this->ask('Enter your JMBG:');
 
 
@@ -36,11 +37,13 @@ class MakeLibrarian extends Command
             'name'    => $name,
             'surname' => $surname,
             'email'   => $email,
+            'password' => $password,
             'jmbg'    => $jmbg,
         ], [
             'name'    => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'email'   => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
             'jmbg'    => 'required|digits:13|unique:users,jmbg',
         ]);
 
@@ -52,12 +55,7 @@ class MakeLibrarian extends Command
             return 1;
         }
 
-
         $photoPath = 'default.jpg';
-
-
-        $password = 'password';
-
 
         $user = User::create([
             'name'         => $name,
@@ -70,7 +68,6 @@ class MakeLibrarian extends Command
         ]);
 
         $this->info("Librarian {$user->name} {$user->surname} created successfully.");
-        $this->info("Default password: {$password}");
 
         return 0;
     }
