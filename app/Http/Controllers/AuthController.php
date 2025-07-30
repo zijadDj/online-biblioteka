@@ -16,9 +16,9 @@ class AuthController extends Controller
         ]);
         $user = User::where('email', $request->email)->first();
       if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([['message' => 'Your credentials are incorrect, please try again']], 400);
+            return response()->json([['message' => 'Your credentials are incorrect, please try again']], 404);
         }
-        
+
         if (!$user->is_librarian) {
             return response()->json([['message' => 'This user cannot perform this operation']], 403);
         }
