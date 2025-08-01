@@ -21,5 +21,11 @@ class UserPolicy
         return $user->is_librarian === '1';
     }
 
+    public function viewAny(User $user): bool
+    {
+        return $user->is_librarian === '1';
+    }
+
+
 
 }

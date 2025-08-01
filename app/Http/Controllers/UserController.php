@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\FilterUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,31 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class UserController extends Controller
 {
     use AuthorizesRequests;
+
+    public function index(FilterUserRequest $request)
+    {
+        $this->authorize('viewAny', User::class);
+
+        $data = $request->validated();
+
+        $roleFlag = $data['role'] === 'librarian' ? '1' : '0';
+        $perPage = $data['per_page'] ?? 20;
+        $search = strtolower($data['search-value'] ?? '');
+
+        $query = User::query()
+            ->where('is_librarian', $roleFlag);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(surname) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(email) LIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        return response()->json($query->paginate($perPage));
+    }
+
 
     public function store(CreateUserRequest $request): JsonResponse
     {
