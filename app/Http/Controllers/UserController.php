@@ -62,4 +62,18 @@ class UserController extends Controller
             'user' => $user,
         ], 201);
     }
+    public function show(User $user)
+    {
+        if (auth()->user() && auth()->user()->is_librarian) {
+            return response()->json([
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'email' => $user->email,
+                'photo_path' => $user->photo_path,
+                'jmbg' => $user->jmbg,
+            ]);
+        } else {
+            return response()->json(['message'=> 'Not authorized'], 403);
+        }
+    }
 }
