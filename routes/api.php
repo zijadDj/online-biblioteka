@@ -10,12 +10,12 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::put('/user/{id}', [UserContoller::class, 'update']);
-Route::post('/update-avatar/{id}', [UserContoller::class, 'updateAvatar']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/user/{id}', [UserContoller::class, 'update']);
+    Route::post('/update-avatar/{id}', [UserContoller::class, 'updateAvatar']);
 }
 
 );
