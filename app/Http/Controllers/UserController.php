@@ -16,11 +16,9 @@ class UserController extends Controller
 
     public function index(FilterUserRequest $request)
     {
-        $this->authorize('viewAny', User::class);
-
         $data = $request->validated();
 
-        $roleFlag = $data['role'] === 'librarian' ? '1' : '0';
+        $roleFlag = $data['role'] === 'librarian' ? User::ROLE_LIBRARIAN : User::ROLE_STUDENT;
         $perPage = $data['per_page'] ?? 20;
         $search = strtolower($data['search-value'] ?? '');
 
@@ -57,7 +55,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'jmbg' => $data['jmbg'],
             'photo_path' => $photoPath,
-            'is_librarian' => $data['role'] === 'librarian' ? '1' : '0',
+            'is_librarian' => $data['role'] === 'librarian' ? User::ROLE_LIBRARIAN : User::ROLE_STUDENT,
             'password' => Hash::make($data['password']),
         ]);
 

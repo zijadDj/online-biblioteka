@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,10 +12,11 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);
+
 }
 
 );
