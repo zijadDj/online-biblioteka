@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class MakeLibrarian extends Command
 {
@@ -32,19 +32,18 @@ class MakeLibrarian extends Command
         $password = $this->ask('Enter your password:');
         $jmbg = $this->ask('Enter your JMBG:');
 
-
         $validator = Validator::make([
-            'name'    => $name,
+            'name' => $name,
             'surname' => $surname,
-            'email'   => $email,
+            'email' => $email,
             'password' => $password,
-            'jmbg'    => $jmbg,
+            'jmbg' => $jmbg,
         ], [
-            'name'    => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'email'   => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'jmbg'    => 'required|digits:13|unique:users,jmbg',
+            'jmbg' => 'required|digits:13|unique:users,jmbg',
         ]);
 
         if ($validator->fails()) {
@@ -52,19 +51,20 @@ class MakeLibrarian extends Command
             foreach ($validator->errors()->all() as $message) {
                 $this->line(" - $message");
             }
+
             return 1;
         }
 
         $photoPath = 'default.jpg';
 
         $user = User::create([
-            'name'         => $name,
-            'surname'      => $surname,
-            'email'        => $email,
-            'jmbg'         => $jmbg,
-            'photo_path'   => $photoPath,
+            'name' => $name,
+            'surname' => $surname,
+            'email' => $email,
+            'jmbg' => $jmbg,
+            'photo_path' => $photoPath,
             'is_librarian' => '1',
-            'password'     => Hash::make($password),
+            'password' => Hash::make($password),
         ]);
 
         $this->info("Librarian {$user->name} {$user->surname} created successfully.");
