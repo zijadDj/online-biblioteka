@@ -15,8 +15,6 @@ class UserController extends Controller
 
     public function store(CreateUserRequest $request): JsonResponse
     {
-        $this->authorize('create', User::class);
-
         $data = $request->validated();
 
         $photoPath = "default.jpg";
