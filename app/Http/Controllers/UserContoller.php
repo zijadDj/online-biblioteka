@@ -36,14 +36,9 @@ class UserContoller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $params = $request->validated();
-
-        $user = User::findOrFail($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
 
         $user->update($params);
         return response()->json(['user' => $user]);
@@ -57,9 +52,8 @@ class UserContoller extends Controller
         //
     }
 
-    public function updateAvatar(Request $request, int $id)
+    public function updateAvatar(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
 
         $request->validate([
             'photo' => 'required|mimes:jpeg,jpg,png,gif|max:2048'
