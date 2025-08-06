@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\FilterUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
@@ -61,5 +64,32 @@ class UserController extends Controller
             'message' => 'User created successfully.',
             'user' => $user,
         ], 201);
+    }
+
+    public function updateAvatar(Request $request, User $user)
+    {
+        $request->validate([
+            'photo' => 'required|mimes:jpeg,jpg,png,gif|max:2048'
+        ]);
+
+        $file = $request->file('photo');
+
+        if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
+            Storage::disk('public')->delete($user->photo_path);
+        }
+
+        $filePath = $file->store('photos', 'public');
+
+        $user->update(['photo_path' => $filePath]);
+
+        return response()->json(['user' => $user]);
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $params = $request->validated();
+
+        $user->update($params);
+        return response()->json(['user' => $user]);
     }
 }
