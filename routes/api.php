@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +15,8 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);
-
+    Route::put('/user/{user}', [UserController::class, 'update']);
+    Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
 }
 
 );
