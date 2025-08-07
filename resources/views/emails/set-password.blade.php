@@ -1,12 +1,15 @@
 @component('mail::message')
-# Welcome, {{ $user->name }}
+    # Resetovanje lozinke
 
-You’ve been added as a librarian. Click the button below to set your password.
+    Kliknite na dugme ispod da resetujete lozinku:
 
-@component('mail::button', ['url' => $url])
-Set Your Password
-@endcomponent
+    @component('mail::button', ['url' => $resetUrl])
+        Resetuj lozinku
+    @endcomponent
 
-Thanks,
-{{ config('app.name') }}
+
+    Ako niste tražili reset lozinke, slobodno ignorišite ovaj email.
+
+    Pozdrav,<br>
+    {{ config('app.name') }}
 @endcomponent
