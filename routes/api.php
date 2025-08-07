@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

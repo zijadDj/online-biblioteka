@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Requests\FilterUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,7 +39,7 @@ class UserController extends Controller
     }
 
 
-    public function store(CreateUserRequest $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -85,7 +84,7 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         $params = $request->validated();
 
