@@ -16,6 +16,7 @@ class LibrarianResetPasswordNotification extends Notification
 
     public function via($notifiable)
     {
+
         return ['mail'];
     }
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Events\LibrarianCreated;
+use App\Http\Controllers\LibrarianPasswordResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,21 +20,8 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::post('/create-librarian', [UserController::class, 'store']);
 }
 );
 
-Route::post('/create-librarian', function (Request $request) {
-    $user = User::create([
-        'name' => $request->input('name'),
-        'surname'=> $request->input('surname')?? '',
-        'email' => $request->input('email'),
-        'password' => bcrypt($request->input('password')) ?? '',
-        'photo_path' => $request->input('photo_path') ?? '',
-        'jmbg' => $request->input('jmbg') ?? random_int(1, 999),
-    ]);
-    event(new LibrarianCreated($user));
-    return response()->json(['message' => 'Librarian created and event fired.']);
-    //Send a POST request to /api/create-librarian with JSON body:
-    // "name": "New Librarian",
-    // "email": "librarian@example.com",
-});
+

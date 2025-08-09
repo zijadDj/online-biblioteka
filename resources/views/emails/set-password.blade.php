@@ -1,15 +1,18 @@
-@component('mail::message')
-    # Resetovanje lozinke
 
-    Kliknite na dugme ispod da resetujete lozinku:
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="utf-8">
+    <title>Postavite lozinku</title>
+</head>
+<body>
+    <p>Pozdrav,</p>
+    <p>Kliknite na dugme ispod kako biste postavili lozinku:</p>
 
-    @component('mail::button', ['url' => $resetUrl])
-        Resetuj lozinku
-    @endcomponent
-
-
-    Ako niste tražili reset lozinke, slobodno ignorišite ovaj email.
-
-    Pozdrav,<br>
-    {{ config('app.name') }}
-@endcomponent
+    <p>
+        <a href="{{ $resetUrl }}" style="display:inline-block;padding:10px 16px;background:#3b82f6;color:#fff;text-decoration:none;border-radius:6px;">
+            Postavi lozinku
+        </a>
+    </p>
+</body>
+</html>

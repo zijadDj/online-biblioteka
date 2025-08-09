@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\LibrarianCreated;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,6 +21,9 @@ class Librarian extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+    protected $dispatchesEvents = [
+        'created' => LibrarianCreated::class,
     ];
 
     public function sendPasswordResetNotification($token)

@@ -70,4 +70,13 @@ class LibrarianPasswordResetController extends Controller
 
         return redirect()->back()->withErrors(['token' => 'Token je nevažeći ili istekao.']);
     }
+
+    public function showForm(Request $request)
+    {
+        if (! $request->filled(['token', 'email'])) {
+            abort(404);
+        }
+        return view('librarian.reset-password');
+    }
+
 }

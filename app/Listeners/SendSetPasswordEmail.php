@@ -23,10 +23,9 @@ class SendSetPasswordEmail
      */
     public function handle(LibrarianCreated $event): void
     {
-        $user=$event->librarian;
-        
-        $token= Password::createToken($user);
-        $url=url("set-password?token={$token}&email={$user->email}");
-        Mail::to($user->email)->send(new \App\Mail\SetPasswordMail($user, $url));
+        $librarian=$event->librarian;
+
+        $token= Password::broker('librarians')->createToken($librarian);
+        $librarian->sendPasswordResetNotification($token);
     }
 }

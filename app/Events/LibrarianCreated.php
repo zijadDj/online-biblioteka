@@ -2,41 +2,15 @@
 
 namespace App\Events;
 
+use App\Models\Librarian;
 use App\Models\User;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-
-namespace App\Events;
-
-use App\Models\User;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 
 class LibrarianCreated
 {
     use Dispatchable, SerializesModels;
-
-    public $librarian;
-
-    public function __construct(User $librarian)
+    public function __construct(public Librarian $librarian)
     {
-        $this->librarian = $librarian;
     }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    // public function broadcastOn(): array
-    // {
-    //     return [
-    //         new PrivateChannel('channel-name'),
-    //     ];
-    // }
 }

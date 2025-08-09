@@ -26,25 +26,21 @@ class SetPasswordMail extends Mailable
         $this->url = $url;
     }
 
-    // /**
-    //  * Get the message envelope.
-    //  */
-    // public function envelope(): Envelope
-    // {
-    //     return new Envelope(
-    //         subject: 'Set Password Mail',
-    //     );
-    // }
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
+    {
+        return new Envelope(subject: 'Set Your Password');
+    }
 
-    // /**
-    //  * Get the message content definition.
-    //  */
-    // public function content(): Content
-    // {
-    //     return new Content(
-    //         markdown: 'emails.set-password',
-    //     );
-    // }
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(markdown: 'emails.set-password');
+    }
 
     // /**
     //  * Get the attachments for the message.
@@ -55,9 +51,4 @@ class SetPasswordMail extends Mailable
     // {
     //     return [];
     // }
-     public function build()
-    {
-        return $this->subject('Set Your Password')
-                    ->markdown('emails.set-password');
-    }
 }
