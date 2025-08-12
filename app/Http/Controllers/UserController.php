@@ -64,6 +64,9 @@ class UserController extends Controller
     }
     public function show(User $user)
     {
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
         return response()->json([
             'id' => $user->id,
             'name' => $user->name,
