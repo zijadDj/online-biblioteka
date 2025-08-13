@@ -31,7 +31,8 @@ class GenreController extends Controller
     public function store(GenreRequest $request)
     {
         $params = $request->validated();
-//        $attachBookIds = $params['book_ids'] ?? [];
+    //        $attachBookIds = $params['book_ids'] ?? [];
+    //        $detachBookIds = $params['remove_book_ids'] ?? [];
         unset($params['book_ids']);
         unset($params['remove_book_ids']);
         $genre = Genre::create($params);
@@ -39,6 +40,9 @@ class GenreController extends Controller
 //        if ($request->has('book_ids')) {
 //            $genre->books()->attach($attachBookIds);
 //    }
+//        if ($request->has('remove_book_ids')) {
+//            $genre->books()->detach($detachBookIds);
+//        }
 
         return new GenreResource($genre);
 
@@ -49,7 +53,8 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+//        $genre->load('books');
+        return new GenreResource($genre);
     }
 
     /**
