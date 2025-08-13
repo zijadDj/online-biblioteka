@@ -60,9 +60,23 @@ class GenreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Genre $genre)
+    public function update(GenreRequest $request, Genre $genre)
     {
-        //
+        $params = $request->validated();
+        //        $attachBookIds = $params['book_ids'] ?? [];
+        //        $detachBookIds = $params['remove_book_ids'] ?? [];
+        unset($params['book_ids']);
+        unset($params['remove_book_ids']);
+        $genre->update($params);
+
+//        if ($request->has('book_ids')) {
+//            $genre->books()->attach($attachBookIds);
+//    }
+//        if ($request->has('remove_book_ids')) {
+//            $genre->books()->detach($detachBookIds);
+//        }
+
+        return new GenreResource($genre);
     }
 
     /**
