@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
@@ -28,7 +28,7 @@ class Book extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function categories():hasMany{
-        return $this->hasMany(Category::class);
+    public function categories():belongsToMany{
+        return $this->belongsToMany(Category::class);
     }
 }

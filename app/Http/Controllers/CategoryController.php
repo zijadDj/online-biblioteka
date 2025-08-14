@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FilterUserRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -31,7 +30,35 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:500',
+            'description' => 'required|string|max:500',
+            'icon' => 'nullable|image|max:5120',
+            'book_ids'=>'nullable|array',
+        ]);
+        $iconPath = "default.jpg";
+
+        if ($request->hasFile('icon')) {
+            $iconPath = $request->file('icon')->store('icons', 'public');
+        }
+        $category = Category::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'icon_path' => $iconPath,
+        ]);
+
+        if(!empty($validated['book_ids'])){
+            $category->books()->attach($validated['book_ids']);
+        }
+        return response()->json([
+            'message' => 'Category created successfully.',
+            'category' => $category]
+            , 201);
+    }
+
+    public function icon(Category $category)
+    {
+        return response()->file(storage_path('app/public/' . $category->icon_path));
     }
 
     /**

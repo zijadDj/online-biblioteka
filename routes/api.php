@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::get('/books/{book}', [BookController::class, 'show']);
     Route::get('/books/{book}/cover', [BookController::class, 'cover']);
     Route::get('/categories',[CategoryController::class, 'index']);
+    Route::post('/categories',[CategoryController::class, 'store']);
+    Route::get('/categories/{category}/icon', [CategoryController::class, 'icon']);
 }
 
 );

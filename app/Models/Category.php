@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\hasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
+    use hasFactory;
     protected $fillable = [
         'name',
         'description',
         'book_id',
     ];
 
-    public function book():hasMany{
-        return $this->hasMany(Book::class);
+    public function book():belongsToMany{
+        return $this->belongsToMany(Book::class);
     }
 }
