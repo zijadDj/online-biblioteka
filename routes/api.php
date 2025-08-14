@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,8 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::get('/books/{book}', [BookController::class, 'show']);
+    Route::get('/books/{book}/cover', [BookController::class, 'cover']);
 }
 
 );
