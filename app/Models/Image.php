@@ -10,4 +10,8 @@ class Image extends Model
         'path',
         'book_id',
     ];
+
+    public function book(){
+        return $this->belongsTo(Book::class);
+    }
 }
