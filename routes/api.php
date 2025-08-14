@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::get('/books/{book}', [BookController::class, 'show']);
     Route::get('/books/{book}/cover', [BookController::class, 'cover']);
+    Route::get('/categories',[CategoryController::class, 'index']);
 }
 
 );
