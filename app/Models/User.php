@@ -6,21 +6,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+
+
+    public const ROLE_LIBRARIAN = '1';
+    public const ROLE_STUDENT = '0';
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
+        'photo_path',
+        'is_librarian',
+        'jmbg',
     ];
 
     /**
