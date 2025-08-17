@@ -17,6 +17,7 @@ class Book extends Model
         'binding',
         'script',
         'dimensions',
+        'genre_id'
     ];
     public function genre(): BelongsTo{
         return $this->belongsTo(Genre::class);
