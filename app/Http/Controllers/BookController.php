@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -19,13 +20,14 @@ class BookController extends Controller
             ], 404);
         }
 
-        return response()->json($book);
+        return new BookResource($book);
     }
 
     public function cover($bookId)
     {
-        // Find the first image for this book
-        $image = Image::where('book_id', $bookId)->first();
+        $image = Image::where('book_id', $bookId)
+            ->where('type', 'cover')
+            ->first();
 
         if (!$image) {
             return response()->json([
@@ -33,7 +35,6 @@ class BookController extends Controller
             ], 404);
         }
 
-        // Build the full path to the cover image
         $coverPath = 'covers/' . ltrim($image->path, '/');
 
         if (!Storage::disk('public')->exists($coverPath)) {
