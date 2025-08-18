@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::apiResource('/genres', GenreController::class);
+    Route::apiResource('/books', BookController::class);
 }
 
 );

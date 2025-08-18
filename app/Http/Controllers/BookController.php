@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -18,9 +23,38 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
-        //
+        $params = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+            $book = Book::create($params);
+
+            if ($request->hasFile('cover_image')) {
+                $file = $request->file('cover_image');
+                $filepath = $file->store('book_covers', 'public');
+
+                Image::create([
+                    'path' => $filepath,
+                    'book_id' => $book->id
+                ]);
+            }
+
+            DB::commit();
+            $book->load('image');
+            return new BookResource($book);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            if (isset($filepath) && Storage::disk('public')->exists($filepath)) {
+                Storage::disk('public')->delete($filepath);
+            }
+
+            throw $e;
+        }
     }
 
     /**
@@ -46,4 +80,6 @@ class BookController extends Controller
     {
         //
     }
+
+
 }

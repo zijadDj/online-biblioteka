@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Book extends Model
 {
@@ -17,4 +18,7 @@ class Book extends Model
         'script',
         'dimensions',
     ];
+    public function image(): HasOne{
+        return $this->hasOne(Image::class);
+    }
 }
