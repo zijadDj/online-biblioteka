@@ -70,7 +70,9 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $params = $request->validated();
+        $book->update($params);
+        return $book;
     }
 
     /**
@@ -80,6 +82,35 @@ class BookController extends Controller
     {
         //
     }
+    public function updateCoverImage(Request $request, Book $book)
+    {
+        $request->validate([
+            'cover_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
 
+        if ($request->hasFile('cover_image')) {
+            $oldCoverImage = $book->image;
+            if ($oldCoverImage) {
+                Storage::disk('public')->delete($oldCoverImage->path);
+                $oldCoverImage->delete();
+            }
+            $file = $request->file('cover_image');
+            $filepath = $file->store('book_covers', 'public');
 
+            Image::create([
+                'path' => $filepath,
+                'book_id' => $book->id
+            ]);
+
+            return response()->json([
+                'message' => 'Cover image updated successfully',
+                'path' => $filepath
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'No image file provided'
+        ], 400);
+    }
 }
+

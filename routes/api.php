@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::apiResource('/genres', GenreController::class);
     Route::apiResource('/books', BookController::class);
+    Route::post('update-image/{book}', [BookController::class, 'updateCoverImage']);
 }
 
 );
