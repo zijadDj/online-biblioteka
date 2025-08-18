@@ -68,6 +68,11 @@ class UserController extends Controller
             'user' => $user,
         ], 201);
     }
+    public function show(User $user)
+    {
+        return response()->json(['user' => $user]);
+    }
+
 
     public function updateAvatar(Request $request, User $user)
     {
@@ -94,5 +99,18 @@ class UserController extends Controller
 
         $user->update($params);
         return response()->json(['user' => $user]);
+    }
+
+    public function destroy(User $user){
+        if($user->id === auth()->id()){
+            return response()->json([
+                'error' => 'You cannot delete your own account'
+            ], 403);
+        }
+
+        $user->delete();
+        return response()->json([
+            'message' => 'User deleted successfully'
+        ], 200);
     }
 }
