@@ -47,6 +47,3 @@ class BookController extends Controller
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
 
-
-
-}
