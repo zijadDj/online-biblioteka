@@ -9,5 +9,6 @@ class Image extends Model
     protected $fillable = [
         'path',
         'book_id',
+        'book_id',
     ];
 }

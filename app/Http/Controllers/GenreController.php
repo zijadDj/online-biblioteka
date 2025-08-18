@@ -28,6 +28,7 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(GenreRequest $request)
     {
         $params = $request->validated();
@@ -41,8 +42,7 @@ class GenreController extends Controller
 //    }
 
         return new GenreResource($genre);
-
-    }
+     }
 
     /**
      * Display the specified resource.
