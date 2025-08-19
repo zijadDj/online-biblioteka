@@ -11,7 +11,7 @@ class Genre extends Model
         'description'
     ];
 
-//    public function books(){
-//        return $this->HasMany(Book::class);
-//    }
+   public function books(){
+       return $this->HasMany(Book::class);
+  }
 }
