@@ -13,13 +13,14 @@ Route::post('/librarian/reset-password', [LibrarianPasswordResetController::clas
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/librarian/reset-password', function () {
     return view('librarian.reset-password');
 });
+
 Route::get('/librarian/dashboard', function () {
     return 'Librarian dashboard placeholder';
 })->middleware('auth:librarian');
-
 
 // Privremena test ruta za reset lozinke
 Route::get('/test-reset', function () {
