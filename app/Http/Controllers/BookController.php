@@ -90,7 +90,7 @@ class BookController extends Controller
     {
         //
     }
-    public function cover($bookId)
+    public function showCover($bookId)
     {
         $image = Image::where('book_id', $bookId)
             ->where('type', 'cover')
