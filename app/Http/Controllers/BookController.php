@@ -80,7 +80,7 @@ class BookController extends Controller
     {
         $params = $request->validated();
         $book->update($params);
-        return $book;
+        return new BookResource($book);
     }
 
     /**
