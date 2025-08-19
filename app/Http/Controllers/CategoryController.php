@@ -58,7 +58,7 @@ class CategoryController extends Controller
 
     public function icon(Category $category)
     {
-        return response()->file(storage_path('app/public/' . $category->icon_path));
+        return response()->file(storage_path('app/public/' . $category['icon_path']));
     }
 
     /**
@@ -72,11 +72,48 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:500',
+            'description' => 'sometimes|string|max:500',
+            'icon' => 'sometimes|image|max:5120',
+            'book_ids'=>'sometimes|array',
+        ]);
+        $iconPath = $category['icon_path'] ;
+
+        if ($request->hasFile('icon')) {
+            $iconPath = $request->file('icon')->store('icons', 'public');
+        }
+        $validated['icon_path'] = $iconPath;
+
+        $category->update($validated);
+
+        if(!empty($validated['book_ids'])){
+            $category->books()->sync($validated['book_ids']);
+        }
+        return response()->json([
+                'message' => 'Category updated successfully.',
+                'category' => $category->fresh()]
+            , 200);
     }
 
+    public function updateIcon(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'icon' => 'required|image|max:5120',
+        ]);
+
+        $iconPath = $request->file('icon')->store('icons', 'public');
+
+        $category->update([
+            'icon_path' => $iconPath,
+        ]);
+        return response()->json([
+            'message' => 'Category icon updated successfully.',
+            'category' => $category->fresh(),
+        ], 200);
+    }
     /**
      * Remove the specified resource from storage.
      */

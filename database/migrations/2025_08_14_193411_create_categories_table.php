@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name',500);
             $table->string('description',500);
             $table->string('icon_path')->nullable();
-            $table->foreignId('book_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 

@@ -13,9 +13,10 @@ class Category extends Model
         'name',
         'description',
         'book_id',
+        'icon_path'
     ];
 
-    public function book():belongsToMany{
+    public function books():belongsToMany{
         return $this->belongsToMany(Book::class);
     }
 }
