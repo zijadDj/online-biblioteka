@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookRequest extends FormRequest
 {
@@ -25,11 +26,11 @@ class BookRequest extends FormRequest
             'name' => 'required|string',
             'description' => 'required|string',
             'language' => 'required|string',
-            'script' => 'required|string',
+            'script' => 'required|string|in:latin,arabic,cyrillic',
             'publisher' => 'required|string',
-            'dimensions' => 'required|string',
+            'dimensions' => ['required', 'string', Rule::in('A1', 'A2', '21cm x 29.7cm', '15cm x 21cm')],
             'isbn' => 'required|string|digits:13|unique:books,isbn',
-            'binding' => 'required|string',
+            'binding' => 'required|string|in:spiral_bound,paperback,hardcover',
             'page_count' => 'required|integer',
             'unit_count' => 'required|integer',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
