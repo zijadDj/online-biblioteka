@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+    use HasFactory;
+
+    
     protected  $fillable = [
         'name',
         'description',
@@ -17,4 +22,13 @@ class Book extends Model
         'script',
         'dimensions',
     ];
+
+
+  
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
+
 }

@@ -2,48 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookResource;
 use App\Models\Book;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show($book)
     {
-        //
+        $book = Book::find($book);
+
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.'
+            ], 404);
+        }
+
+        return new BookResource($book);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function cover($bookId)
     {
-        //
+        $image = Image::where('book_id', $bookId)
+            ->where('type', 'cover')
+            ->first();
+
+        if (!$image) {
+            return response()->json([
+                'message' => 'Cover not found.'
+            ], 404);
+        }
+
+        $coverPath = 'covers/' . ltrim($image->path, '/');
+
+        if (!Storage::disk('public')->exists($coverPath)) {
+            return response()->json([
+                'message' => 'Cover file does not exist on server.'
+            ], 404);
+        }
+
+        // Return the file
+        return response()->file(storage_path("app/public/{$coverPath}"));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Book $book)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Book $book)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Book $book)
-    {
-        //
-    }
-}
