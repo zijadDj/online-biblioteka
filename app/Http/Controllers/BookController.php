@@ -120,7 +120,7 @@ class BookController extends Controller
         ]);
 
         if ($request->hasFile('cover_image')) {
-            $oldCoverImage = $book->images()->where('book_id', $book->id)->where('type', 'cover')->first();
+            $oldCoverImage = $book->images()->where('type', 'cover')->first();
             if ($oldCoverImage) {
                 Storage::disk('public')->delete($oldCoverImage->path);
                 $oldCoverImage->delete();
