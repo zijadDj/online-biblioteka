@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -117,8 +118,19 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        if (Storage::disk('public')->exists($category['icon_path'])) {
+            Storage::disk('public')->delete($category['icon_path']);
+            $category->delete();
+            return response()->json([
+                'message' => 'Category and icon deleted successfully.',
+            ], 200);
+        }
+
+        $category->delete();
+        return response()->json([
+            'message' => 'Category deleted successfully.',
+        ]);
     }
 }
