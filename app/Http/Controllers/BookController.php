@@ -23,7 +23,7 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BookRequest $request)
+    public function store(Request $request)
     {
         $params = $request->validated();
 
@@ -34,7 +34,7 @@ class BookController extends Controller
 
             if ($request->hasFile('cover_image')) {
                 $file = $request->file('cover_image');
-                $filepath = $file->store('book_covers', 'public');
+                $filepath = $file->store('covers', 'public');
 
                 Image::create([
                     'path' => $filepath,
@@ -62,13 +62,21 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        $book = Book::find($book);
+
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.'
+            ], 404);
+        }
+
+        return new BookResource($book);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(BookRequest $request, Book $book)
     {
         $params = $request->validated();
         $book->update($params);
@@ -78,11 +86,34 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy(string $id)
     {
         //
     }
-    public function updateCoverImage(Request $request, Book $book)
+    public function cover($bookId)
+    {
+        $image = Image::where('book_id', $bookId)
+            ->where('type', 'cover')
+            ->first();
+
+        if (!$image) {
+            return response()->json([
+                'message' => 'Cover not found.'
+            ], 404);
+        }
+
+        $coverPath = 'covers/' . ltrim($image->path, '/');
+
+        if (!Storage::disk('public')->exists($coverPath)) {
+            return response()->json([
+                'message' => 'Cover file does not exist on server.'
+            ], 404);
+        }
+
+        // Return the file
+        return response()->file(storage_path("app/public/{$coverPath}"));
+    }
+    public function updateCover(Request $request, Book $book)
     {
         $request->validate([
             'cover_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -95,7 +126,7 @@ class BookController extends Controller
                 $oldCoverImage->delete();
             }
             $file = $request->file('cover_image');
-            $filepath = $file->store('book_covers', 'public');
+            $filepath = $file->store('covers', 'public');
 
             Image::create([
                 'path' => $filepath,
@@ -113,4 +144,3 @@ class BookController extends Controller
         ], 400);
     }
 }
-
