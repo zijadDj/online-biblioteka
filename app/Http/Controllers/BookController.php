@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\Image;
@@ -75,9 +76,11 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BookRequest $request, Book $book)
     {
-        //
+        $params = $request->validated();
+        $book->update($params);
+        return new BookResource($book);
     }
 
     /**
@@ -87,7 +90,7 @@ class BookController extends Controller
     {
         //
     }
-    public function cover($bookId)
+    public function showCover($bookId)
     {
         $image = Image::where('book_id', $bookId)
             ->where('type', 'cover')
@@ -109,5 +112,35 @@ class BookController extends Controller
 
         // Return the file
         return response()->file(storage_path("app/public/{$coverPath}"));
+    }
+    public function updateCover(Request $request, Book $book)
+    {
+        $request->validate([
+            'cover_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
+
+        if ($request->hasFile('cover_image')) {
+            $oldCoverImage = $book->images()->where('type', 'cover')->first();
+            if ($oldCoverImage) {
+                Storage::disk('public')->delete($oldCoverImage->path);
+                $oldCoverImage->delete();
+            }
+            $file = $request->file('cover_image');
+            $filepath = $file->store('covers', 'public');
+
+            Image::create([
+                'path' => $filepath,
+                'book_id' => $book->id
+            ]);
+
+            return response()->json([
+                'message' => 'Cover image updated successfully',
+                'path' => $filepath
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'No image file provided'
+        ], 400);
     }
 }
