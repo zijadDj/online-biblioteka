@@ -20,6 +20,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::apiResource('/genres', GenreController::class);
 
 
 }
