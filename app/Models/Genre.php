@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Genre extends Model
 {
@@ -11,7 +12,7 @@ class Genre extends Model
         'description'
     ];
 
-//    public function books(){
-//        return $this->HasMany(Book::class);
-//    }
+    public function books(): BelongsToMany{
+        return $this->BelongsToMany(Book::class);
+    }
 }
