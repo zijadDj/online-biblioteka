@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
@@ -19,7 +20,7 @@ class Book extends Model
         'dimensions',
         'genre_id'
     ];
-    public function genre(): BelongsTo{
-        return $this->belongsTo(Genre::class);
+    public function genre(): BelongsToMany{
+        return $this->belongsToMany(Genre::class);
     }
 }

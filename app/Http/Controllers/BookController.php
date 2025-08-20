@@ -20,7 +20,9 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $params = $request->all();
+        $book = Book::create($params);
+        return $book;
     }
 
     /**

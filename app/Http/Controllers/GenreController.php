@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GenreRequest;
 use App\Http\Resources\GenreResource;
-use App\Models\Book;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 
@@ -35,11 +34,11 @@ class GenreController extends Controller
         $params = $request->validated();
         $attachBookIds = $params['book_ids'] ?? [];
         unset($params['book_ids']);
-        unset($params['remove_book_ids']);
         $genre = Genre::create($params);
 
         if ($request->has('book_ids')) {
-            Book::whereIn('id', $attachBookIds)->update(['genre_id' => $genre->id]);
+            $genre->books()->attach($attachBookIds);
+            $genre->load('books');
     }
 
         return new GenreResource($genre);
