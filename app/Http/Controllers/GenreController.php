@@ -31,20 +31,15 @@ class GenreController extends Controller
     public function store(GenreRequest $request)
     {
         $params = $request->validated();
-    //        $attachBookIds = $params['book_ids'] ?? [];
-    //        $detachBookIds = $params['remove_book_ids'] ?? [];
+        $attachBookIds = $params['book_ids'] ?? [];
         unset($params['book_ids']);
-        unset($params['remove_book_ids']);
         $genre = Genre::create($params);
 
-//        if ($request->has('book_ids')) {
-//            $genre->books()->attach($attachBookIds);
-//    }
-//        if ($request->has('remove_book_ids')) {
-//            $genre->books()->detach($detachBookIds);
-//        }
-
-        return new GenreResource($genre);
+        if ($request->has('book_ids')) {
+            $genre->books()->attach($attachBookIds);
+    }
+        $genre->load('books');
+        return new GenreResource ($genre);
 
     }
 
@@ -53,7 +48,7 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-//        $genre->load('books');
+        $genre->load('books');
         return new GenreResource($genre);
     }
 
@@ -63,19 +58,19 @@ class GenreController extends Controller
     public function update(GenreRequest $request, Genre $genre)
     {
         $params = $request->validated();
-        //        $attachBookIds = $params['book_ids'] ?? [];
-        //        $detachBookIds = $params['remove_book_ids'] ?? [];
+        $attachBookIds = $params['book_ids'] ?? [];
+        $detachBookIds = $params['remove_book_ids'] ?? [];
         unset($params['book_ids']);
         unset($params['remove_book_ids']);
         $genre->update($params);
 
-//        if ($request->has('book_ids')) {
-//            $genre->books()->attach($attachBookIds);
-//    }
-//        if ($request->has('remove_book_ids')) {
-//            $genre->books()->detach($detachBookIds);
-//        }
-
+        if ($request->has('book_ids')) {
+            $genre->books()->syncWithoutDetaching($attachBookIds);
+    }
+        if ($request->has('remove_book_ids')) {
+            $genre->books()->detach($detachBookIds);
+        }
+        $genre->load('books');
         return new GenreResource($genre);
     }
 
