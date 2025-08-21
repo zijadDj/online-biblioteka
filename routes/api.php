@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::apiResource('/books', BookController::class);
     Route::get('/books/{book}/cover', [BookController::class, 'showCover']);
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
+    Route::post('/publishers', [PublisherController::class, 'store']);
 }
 
 );
