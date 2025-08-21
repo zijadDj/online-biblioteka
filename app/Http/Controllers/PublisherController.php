@@ -72,6 +72,8 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        //
+        Publisher::destroy($publisher['id']);
+        return response()->json([
+            "message"=>"Publisher: ".$publisher['name']." deleted successfully"],200);
     }
 }
