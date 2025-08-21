@@ -12,7 +12,13 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        //
+        $search=request()->input('q');
+        $perPage=request()->input('paginate',20);
+        $query=Publisher::query();
+        if($search){
+            $query->where('name','like','%'.$search.'%');
+        }
+        return response()->json($query->paginate($perPage));
     }
 
     /**
