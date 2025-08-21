@@ -86,10 +86,33 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($bookId)
     {
-        //
+        $book = Book::find($bookId);
+
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.'
+            ], 404);
+        }
+
+        foreach ($book->images as $image) {
+            $coverPath = 'covers/' . ltrim($image->path, '/');
+
+            if (Storage::disk('public')->exists($coverPath)) {
+                Storage::disk('public')->delete($coverPath);
+            }
+
+            $image->delete();
+        }
+
+        $book->delete();
+
+        return response()->json([
+            'message' => 'Book and associated images deleted successfully.'
+        ], 200);
     }
+
     public function showCover($bookId)
     {
         $image = Image::where('book_id', $bookId)
