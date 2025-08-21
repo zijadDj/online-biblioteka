@@ -25,6 +25,8 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
     Route::get('/publishers', [PublisherController::class, 'index']);
     Route::post('/publishers', [PublisherController::class, 'store']);
+    Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
+    Route::put('/publishers/{publisher}', [PublisherController::class, 'update']);
 }
 
 );
