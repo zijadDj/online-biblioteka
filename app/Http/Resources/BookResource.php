@@ -27,7 +27,8 @@ class BookResource extends JsonResource
             'dimensions' => $this->dimensions,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            'image' => new ImageResource($this->whenLoaded('image')),
+            'image' => ImageResource::collection($this->whenLoaded('images')),
+            'genres' => GenreResource::collection($this->whenLoaded('genres')),
         ];
     }
 }

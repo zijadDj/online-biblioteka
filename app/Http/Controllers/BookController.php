@@ -53,7 +53,7 @@ class BookController extends Controller
             }
 
             DB::commit();
-            $book->load('images');
+            $book->load('images', 'genres');
             return new BookResource($book);
 
         } catch (\Exception $e) {
