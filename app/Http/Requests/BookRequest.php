@@ -29,11 +29,15 @@ class BookRequest extends FormRequest
             'script' => 'required|string|in:latin,arabic,cyrillic',
             'publisher' => 'required|string',
             'dimensions' => ['required', 'string', Rule::in('A1', 'A2', '21cm x 29.7cm', '15cm x 21cm')],
-            'isbn' => 'required|string|digits:13|unique:books,isbn',
+            'isbn' => ['required','string','digits:13', Rule::unique('books', 'isbn')->ignore($this->route('book'))],
             'binding' => 'required|string|in:spiral_bound,paperback,hardcover',
             'page_count' => 'required|integer',
             'unit_count' => 'required|integer',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'genre_ids' => 'sometimes|array',
+            'genre_ids.*' => 'integer|exists:genres,id',
+            'remove_genre_ids' => 'sometimes|array',
+            'remove_genre_ids.*' => 'integer|exists:genres,id',
         ];
     }
 }
