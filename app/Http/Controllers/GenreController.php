@@ -58,18 +58,7 @@ class GenreController extends Controller
     public function update(GenreRequest $request, Genre $genre)
     {
         $params = $request->validated();
-        $attachBookIds = $params['book_ids'] ?? [];
-        $detachBookIds = $params['remove_book_ids'] ?? [];
-        unset($params['book_ids']);
-        unset($params['remove_book_ids']);
         $genre->update($params);
-
-        if ($request->has('book_ids')) {
-            $genre->books()->syncWithoutDetaching($attachBookIds);
-    }
-        if ($request->has('remove_book_ids')) {
-            $genre->books()->detach($detachBookIds);
-        }
         $genre->load('books');
         return new GenreResource($genre);
     }
