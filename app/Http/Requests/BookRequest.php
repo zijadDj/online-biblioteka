@@ -34,6 +34,10 @@ class BookRequest extends FormRequest
             'page_count' => 'required|integer',
             'unit_count' => 'required|integer',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'genre_ids' => 'sometimes|array',
+            'genre_ids.*' => 'integer|exists:genres,id',
+            'remove_genre_ids' => 'sometimes|array',
+            'remove_genre_ids.*' => 'integer|exists:genres,id',
         ];
     }
 }
