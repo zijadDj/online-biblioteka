@@ -32,15 +32,7 @@ class GenreController extends Controller
     public function store(GenreRequest $request)
     {
         $params = $request->validated();
-        $attachBookIds = $params['book_ids'] ?? [];
-        unset($params['book_ids']);
         $genre = Genre::create($params);
-
-        if ($request->has('book_ids')) {
-            $genre->books()->attach($attachBookIds);
-            $genre->load('books');
-    }
-
         return new GenreResource($genre);
      }
 

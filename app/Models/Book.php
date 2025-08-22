@@ -17,10 +17,9 @@ class Book extends Model
         'language',
         'binding',
         'script',
-        'dimensions',
-        'genre_id'
+        'dimensions'
     ];
-    public function genre(): BelongsToMany{
+    public function genres(): BelongsToMany{
         return $this->belongsToMany(Genre::class);
     }
 }
