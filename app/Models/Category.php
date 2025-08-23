@@ -12,7 +12,6 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
-        'book_id',
         'icon_path'
     ];
 
