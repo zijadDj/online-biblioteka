@@ -11,6 +11,7 @@ class Image extends Model
     protected $fillable = [
         'path',
         'book_id',
+        'type'
     ];
 
     public function book(){
