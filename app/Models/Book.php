@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Book extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
+    protected  $fillable = [
         'name',
         'description',
         'page_count',
@@ -21,6 +20,7 @@ class Book extends Model
         'script',
         'dimensions',
     ];
+
 
 
     public function images()
