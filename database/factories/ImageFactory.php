@@ -14,6 +14,7 @@ class ImageFactory extends Factory
         return [
             'book_id' => Book::factory(), // create a new book if none exists
             'path' => $this->faker->word() . '.jpg', // random word + .jpg
+            'type' => $this->faker->randomElement(['cover', 'preview', 'back']),
         ];
     }
 }
