@@ -23,7 +23,9 @@ class AuthorController extends Controller
      */
     public function store(AuthorRequest $request)
     {
-        $params = $request->validated(); if ($request->hasFile('photo')) {
+        $params = $request->validated();
+
+        if ($request->hasFile('photo')) {
         $file = $request->file('photo');
         $path = $file->store('author_pictures', 'public');
         $params['picture'] = $path;
