@@ -23,20 +23,12 @@ class AuthorController extends Controller
      */
     public function store(AuthorRequest $request)
     {
-        $params = $request->validated();
+        $params = $request->validated(); if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $path = $file->store('author_pictures', 'public');
+        $params['picture'] = $path;
+    }
         $author = Author::create($params);
-
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $path = $file->store('author_photos', 'public');
-
-            Image::create([
-                'path' => $path,
-//                'type' => 'author_photo',
-                'author_id' => $author->id,
-            ]);
-        }
-        $author->load('images');
         return new AuthorResource($author);
     }
 

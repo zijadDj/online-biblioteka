@@ -16,9 +16,10 @@ class AuthorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'full_name' => $this->full_name,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'biography' => $this->biography,
-            'images' =>  $this->whenLoaded('images') // add ImageResource later
+            'picture' => $this->picture,
         ];
     }
 }
