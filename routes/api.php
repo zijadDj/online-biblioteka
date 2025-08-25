@@ -7,13 +7,9 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
 
-    Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);
@@ -22,6 +18,9 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::apiResource('/genres', GenreController::class);
     Route::apiResource('/books', BookController::class);
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
 }
 
 );
