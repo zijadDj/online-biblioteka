@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->integer('period');
             $table->timestamps();
         });
@@ -24,6 +23,7 @@ return new class extends Migration
             ['name' => 'Reservation period', 'period' => 7,],
         ]);
     }
+
     /**
      * Reverse the migrations.
      */
