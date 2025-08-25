@@ -5,7 +5,6 @@
     use App\Http\Requests\AuthorRequest;
     use App\Http\Resources\AuthorResource;
     use App\Models\Author;
-    use App\Models\Image;
     use Illuminate\Http\Request;
 
     class AuthorController extends Controller
@@ -13,9 +12,28 @@
         /**
          * Display a listing of the resource.
          */
-        public function index()
+        public function index(Request $request)
         {
-            //
+            $limit = $request->query('limit', 20);
+            $allowedValues = [20, 50, 100];
+
+            if (!in_array($limit, $allowedValues)) {
+                return response()->json(['message' => 'Invalid limit'], 400);
+            }
+
+            $authors = Author::query();
+            $searchTerm = $request->query('q');
+
+            if ($searchTerm) {
+                $authors = $authors->where(function ($query) use ($searchTerm) {
+                    $query->where('first_name', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('last_name', 'like', '%' . $searchTerm . '%');
+                });
+            }
+
+            $authors = $authors->paginate($limit);
+
+            return AuthorResource::collection($authors);
         }
 
         /**
