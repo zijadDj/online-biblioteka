@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterUserRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -15,14 +16,11 @@ class CategoryController extends Controller
         $perPage = $request->input('per_page',20);
         $perPage= in_array($perPage,[20,50,100]) ? $perPage : 20;
         $search = strtolower($request->input('search-value',''));
-        $query = Category::query();
 
-        if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
+        $query = Category::query()->when($search, function ($q) use ($search) {
                 $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
-                    ->orWhereRaw('LOWER(description) LIKE ?', ["%{$search}%"]);
-            });
-        }
+                ->orWhereRaw('LOWER(description) LIKE ?', ["%{$search}%"]);
+        });
         return response()->json($query->paginate($perPage));
     }
     /**
