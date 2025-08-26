@@ -5,7 +5,6 @@
     use App\Http\Requests\AuthorRequest;
     use App\Http\Resources\AuthorResource;
     use App\Models\Author;
-    use App\Models\Image;
     use Illuminate\Http\Request;
 
     class AuthorController extends Controller
@@ -39,7 +38,7 @@
          */
         public function show(Author $author)
         {
-            //
+            return new AuthorResource($author);
         }
 
         /**
