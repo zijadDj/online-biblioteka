@@ -91,7 +91,9 @@
          */
         public function destroy(Author $author)
         {
+            Storage::disk('public')->delete($author->picture);
             $author->delete();
+
             return response()->json(['message' => 'Author Deleted Successfully']);
         }
 
