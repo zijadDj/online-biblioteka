@@ -20,19 +20,19 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        $validated= $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
-            'website'=> 'nullable|url|max:255',
-            'email'=> 'nullable|email|max:255',
-            'phone_number'=> 'nullable|string|max:255',
-            'established_year'=> 'nullable|integer'
+            'website' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'established_year' => 'nullable|integer'
         ]);
-        $publisher=Publisher::create($validated);
+        $publisher = Publisher::create($validated);
 
         return response()->json([
-            'message'=>"Publisher created successfully.",
-            "publisher"=>$publisher], 201);
+            'message' => "Publisher created successfully.",
+            "publisher" => $publisher], 201);
     }
 
     /**
