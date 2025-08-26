@@ -62,14 +62,6 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        $book = Book::find($book);
-
-        if (!$book) {
-            return response()->json([
-                'message' => 'Book not found.'
-            ], 404);
-        }
-
         return new BookResource($book);
     }
 
@@ -86,16 +78,8 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($bookId)
+    public function destroy(Book $book)
     {
-        $book = Book::find($bookId);
-
-        if (!$book) {
-            return response()->json([
-                'message' => 'Book not found.'
-            ], 404);
-        }
-
         foreach ($book->images as $image) {
             $coverPath = 'covers/' . ltrim($image->path, '/');
 
@@ -113,11 +97,9 @@ class BookController extends Controller
         ], 200);
     }
 
-    public function showCover($bookId)
+    public function showCover(Book $book)
     {
-        $image = Image::where('book_id', $bookId)
-            ->where('type', 'cover')
-            ->first();
+        $image = $book->images()->where('type', 'cover')->first();
 
         if (!$image) {
             return response()->json([
@@ -132,8 +114,7 @@ class BookController extends Controller
                 'message' => 'Cover file does not exist on server.'
             ], 404);
         }
-
-        // Return the file
+        
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
     public function updateCover(Request $request, Book $book)
