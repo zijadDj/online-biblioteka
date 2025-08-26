@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::apiResource('/authors', AuthorController::class);
+
 
 Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -22,7 +22,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::apiResource('/genres', GenreController::class);
-
+    Route::apiResource('/authors', AuthorController::class);
 }
 
 );
