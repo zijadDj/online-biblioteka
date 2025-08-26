@@ -18,18 +18,15 @@
             $allowedValues = [20, 50, 100];
 
             if (!in_array($limit, $allowedValues)) {
-                return response()->json(['message' => 'Invalid limit'], 400);
+                $limit = 20;
             }
 
             $authors = Author::query();
             $searchTerm = $request->query('q');
 
-            if ($searchTerm) {
-                $authors = $authors->where(function ($query) use ($searchTerm) {
-                    $query->where('first_name', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('last_name', 'like', '%' . $searchTerm . '%');
-                });
-            }
+            $authors->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereAny(['first_name', 'last_name'], 'like', "%{$searchTerm}%");
+            });
 
             $authors = $authors->paginate($limit);
 
@@ -43,8 +40,8 @@
         {
             $params = $request->validated();
 
-            if ($request->hasFile('photo')) {
-                $file = $request->file('photo');
+            if ($request->hasFile('picture')) {
+                $file = $request->file('picture');
                 $path = $file->store('author_pictures', 'public');
                 $params['picture'] = $path;
             }
