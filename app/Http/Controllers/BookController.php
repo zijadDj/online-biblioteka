@@ -23,7 +23,7 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
         $params = $request->validated();
 
@@ -41,11 +41,20 @@ class BookController extends Controller
                     'book_id' => $book->id
                 ]);
             }
+            if ($request->has('genre_ids')) {
+                $attachGenreIds = $request->input('genre_ids');
+                unset($params['genre_ids']);
+                $book->genres()->syncWithoutDetaching($attachGenreIds);
+            }
+            if ($request->has('remove_genre_ids')) {
+                $removeGenreIds = $request->input('remove_genre_ids');
+                unset($params['remove_genre_ids']);
+                $book->genres()->detach($removeGenreIds);
+            }
 
             DB::commit();
-            $book->load('image');
+            $book->load('images', 'genres');
             return new BookResource($book);
-
         } catch (\Exception $e) {
             DB::rollback();
 
