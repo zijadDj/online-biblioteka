@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::apiResource('/books', BookController::class);
     Route::get('/books/{book}/cover', [BookController::class, 'showCover']);
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
+    Route::delete('/books/{id}', [BookController::class, 'destroy']);
     Route::get('/categories',[CategoryController::class, 'index']);
 }
 
