@@ -5,7 +5,6 @@
     use App\Http\Requests\AuthorRequest;
     use App\Http\Resources\AuthorResource;
     use App\Models\Author;
-    use App\Models\Book;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Storage;
 
@@ -65,20 +64,7 @@
         public function update(AuthorRequest $request, Author $author)
         {
             $params = $request->validated();
-            $attachBookIds = $params['book_ids'];
-            $detachBookIds = $params['remove_book_ids'];
-            unset($params['remove_book_ids']);
-            unset($params['book_ids']);
-
-            if ($attachBookIds) {
-                Book::whereIn('id', $attachBookIds)->update(['author_id' => $author->id]);
-            }
-            if ($detachBookIds) {
-                Book::whereIn('id', $detachBookIds)->update(['author_id' => null]);
-            }
-
             $author->update($params);
-            $author->load('books');
             return new AuthorResource($author);
         }
 
