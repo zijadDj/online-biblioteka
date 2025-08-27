@@ -8,8 +8,6 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 
 
-
-
 class GenreController extends Controller
 {
     /**
@@ -34,7 +32,7 @@ class GenreController extends Controller
         $params = $request->validated();
         $genre = Genre::create($params);
         return new GenreResource($genre);
-     }
+    }
 
     /**
      * Display the specified resource.
@@ -57,6 +55,7 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+        return response()->json(['message' => 'Genre Deleted Successfully']);
     }
 }
