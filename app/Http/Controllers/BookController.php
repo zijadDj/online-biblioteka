@@ -114,7 +114,7 @@ class BookController extends Controller
                 'message' => 'Cover file does not exist on server.'
             ], 404);
         }
-        
+
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
     public function updateCover(Request $request, Book $book)
