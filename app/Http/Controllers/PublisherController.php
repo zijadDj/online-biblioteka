@@ -17,10 +17,9 @@ class PublisherController extends Controller
             'q' => ['nullable', 'string'],
             'paginate' => ['nullable', 'integer', Rule::in([20, 50, 100])],
         ]);
-
         $search = trim($validated['q'] ?? '');
         $perPage = $validated['paginate'] ?? 20;
-
+      
         $query = Publisher::query();
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -51,9 +50,9 @@ class PublisherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Publisher $publiher)
+    public function show(Publisher $publisher)
     {
-        //
+        return response()->json($publisher);
     }
 
     /**
