@@ -47,7 +47,9 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+        $params = $request->validated();
+        $genre->update($params);
+        return new GenreResource($genre);
     }
 
     /**
