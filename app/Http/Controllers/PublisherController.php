@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PublisherController extends Controller
 {
@@ -12,11 +13,14 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        $search = trim(request()->input('q'));
-        $perPage = request()->integer('paginate', 20);
-        if (!in_array($perPage, [20, 50, 100])) {
-            return response()->json(['message' => 'Invalid per page value.'], 422);
-        }
+        $validated = request()->validate([
+            'q' => ['nullable', 'string'],
+            'paginate' => ['nullable', 'integer', Rule::in([20, 50, 100])],
+        ]);
+
+        $search = trim($validated['q'] ?? '');
+        $perPage = $validated['paginate'] ?? 20;
+
         $query = Publisher::query();
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
