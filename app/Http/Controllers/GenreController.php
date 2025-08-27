@@ -49,7 +49,6 @@ class GenreController extends Controller
     {
         $params = $request->validated();
         $genre->update($params);
-        $genre->load('books');
         return new GenreResource($genre);
     }
 
