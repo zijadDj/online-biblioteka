@@ -90,7 +90,6 @@
             if (Storage::disk('public')->exists($author->picture)) {
                 Storage::disk('public')->delete($author->picture);
             }
-
             $author->delete();
 
             return response()->json(['message' => 'Author Deleted Successfully']);
