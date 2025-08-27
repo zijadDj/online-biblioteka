@@ -22,7 +22,7 @@
             }
 
             $authors = Author::query();
-            $searchTerm = $request->query('q');
+            $searchTerm = $request->query('search-value');
 
             $authors->when($searchTerm, function ($query, $searchTerm) {
                 $query->whereAny(['first_name', 'last_name'], 'like', "%{$searchTerm}%");
