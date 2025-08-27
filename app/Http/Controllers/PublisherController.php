@@ -63,7 +63,8 @@ class PublisherController extends Controller
             'established_year' => 'nullable|integer'
         ]);
         $publisher->update($validated);
-        return response()->json(["message" => "Publisher: " . $publisher['name'] . " updated successfully",
+        return response()->json([
+            "message" => "Publisher: " . $publisher['name'] . " updated successfully",
             "publisher:" => $publisher
         ], 201);
     }
