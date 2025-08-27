@@ -87,7 +87,7 @@
          */
         public function destroy(Author $author)
         {
-            if (Storage::disk('public')->exists($author->picture)) {
+            if ($author->picture && Storage::disk('public')->exists($author->picture)) {
                 Storage::disk('public')->delete($author->picture);
             }
             $author->delete();
