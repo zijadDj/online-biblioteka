@@ -32,7 +32,8 @@ class PublisherController extends Controller
 
         return response()->json([
             'message' => "Publisher created successfully.",
-            "publisher" => $publisher], 201);
+            "publisher" => $publisher
+        ], 201);
     }
 
     /**
