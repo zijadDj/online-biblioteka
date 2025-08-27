@@ -28,10 +28,13 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
-    {
 
-    }
+    public function store(GenreRequest $request)
+    {
+        $params = $request->validated();
+        $genre = Genre::create($params);
+        return new GenreResource($genre);
+     }
 
     /**
      * Display the specified resource.
