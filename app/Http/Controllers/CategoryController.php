@@ -12,16 +12,17 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page',20);
-        $perPage= in_array($perPage,[20,50,100]) ? $perPage : 20;
-        $search = strtolower($request->input('search-value',''));
+        $perPage = $request->input('per_page', 20);
+        $perPage = in_array($perPage, [20, 50, 100]) ? $perPage : 20;
+        $search = strtolower($request->input('search-value', ''));
 
         $query = Category::query()->when($search, function ($q) use ($search) {
-                $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+            $q->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
                 ->orWhereRaw('LOWER(description) LIKE ?', ["%{$search}%"]);
         });
         return response()->json($query->paginate($perPage));
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -31,7 +32,6 @@ class CategoryController extends Controller
             'name' => 'required|string|max:500',
             'description' => 'required|string|max:500',
             'icon' => 'nullable|image|max:5120',
-            'book_ids'=>'nullable|array',
         ]);
         $iconPath = "default.jpg";
 
@@ -44,12 +44,9 @@ class CategoryController extends Controller
             'icon_path' => $iconPath,
         ]);
 
-        if(!empty($validated['book_ids'])){
-            $category->books()->attach($validated['book_ids']);
-        }
         return response()->json([
-            'message' => 'Category created successfully.',
-            'category' => $category]
+                'message' => 'Category created successfully.',
+                'category' => $category]
             , 201);
     }
 
@@ -75,13 +72,9 @@ class CategoryController extends Controller
             'name' => 'sometimes|string|max:500',
             'description' => 'sometimes|string|max:500',
             'icon' => 'sometimes|image|max:5120',
-            'book_ids'=>'sometimes|array',
         ]);
         $category->update($validated);
 
-        if(!empty($validated['book_ids'])){
-            $category->books()->sync($validated['book_ids']);
-        }
         return response()->json([
                 'message' => 'Category updated successfully.',
                 'category' => $category->fresh()]
@@ -104,6 +97,7 @@ class CategoryController extends Controller
             'category' => $category->fresh(),
         ], 200);
     }
+
     /**
      * Remove the specified resource from storage.
      */
