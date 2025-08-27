@@ -39,7 +39,7 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+        return new GenreResource($genre);
     }
 
     /**
