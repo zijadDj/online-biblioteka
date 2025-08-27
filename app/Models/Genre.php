@@ -12,7 +12,7 @@ class Genre extends Model
         'description'
     ];
 
-    public function books(): BelongsToMany{
-        return $this->BelongsToMany(Book::class);
-    }
+   public function books(): belongsToMany{
+       return $this->belongsToMany(Book::class);
+   }
 }

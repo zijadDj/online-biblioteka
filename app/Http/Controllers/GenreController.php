@@ -8,8 +8,6 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 
 
-
-
 class GenreController extends Controller
 {
     /**
@@ -28,19 +26,12 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(GenreRequest $request)
     {
         $params = $request->validated();
-        $attachBookIds = $params['book_ids'] ?? [];
-        unset($params['book_ids']);
         $genre = Genre::create($params);
-
-        if ($request->has('book_ids')) {
-            $genre->books()->attach($attachBookIds);
-    }
-        $genre->load('books');
-        return new GenreResource ($genre);
-
+        return new GenreResource($genre);
     }
 
     /**
@@ -48,30 +39,15 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        $genre->load('books');
-        return new GenreResource($genre);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(GenreRequest $request, Genre $genre)
+    public function update(Request $request, Genre $genre)
     {
-        $params = $request->validated();
-        $attachBookIds = $params['book_ids'] ?? [];
-        $detachBookIds = $params['remove_book_ids'] ?? [];
-        unset($params['book_ids']);
-        unset($params['remove_book_ids']);
-        $genre->update($params);
-
-        if ($request->has('book_ids')) {
-            $genre->books()->syncWithoutDetaching($attachBookIds);
-    }
-        if ($request->has('remove_book_ids')) {
-            $genre->books()->detach($detachBookIds);
-        }
-        $genre->load('books');
-        return new GenreResource($genre);
+        //
     }
 
     /**

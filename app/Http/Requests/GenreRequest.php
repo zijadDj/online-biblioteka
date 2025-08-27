@@ -24,10 +24,6 @@ class GenreRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'required|string',
-            'book_ids' => 'sometimes|array',
-            'book_ids.*' => 'integer|exists:books,id',
-            'remove_book_ids' => 'sometimes|array',
-            'remove_book_ids.*' => 'integer|exists:books,id'
         ];
     }
 }

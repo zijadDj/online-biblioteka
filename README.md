@@ -92,3 +92,39 @@ MAIL_FROM_NAME="${APP_NAME}"
 - The `main` branch is protected — direct commits are not allowed.
 - At least one approval is required before a pull request can be merged.
 - Write clear commit messages and follow Laravel coding standards.
+
+
+
+## Code Formatting with Laravel Pint
+
+This project uses [Laravel Pint](https://laravel.com/docs/pint) for code formatting.
+
+### Installation
+
+Pint is already installed as a development dependency via Composer.
+
+### Usage
+
+To format your codebase according to Laravel's conventions, run:
+./vendor/bin/pint
+
+
+
+## Testing with Laravel Pest
+This project uses PEST as the testing framework for a more expressive and elegant approach to writing tests.
+
+### Installation
+PEST is already installed via Composer, and the tests/Pest.php bootstrap file is configured.
+
+### Running Tests
+You can run all tests with:
+
+bash
+php artisan test
+
+or directly with:
+
+bash
+./vendor/bin/pest
+
+Make sure to write your tests inside the tests/Feature or tests/Unit directories.
