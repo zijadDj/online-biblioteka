@@ -64,6 +64,11 @@ class UserController extends Controller
             'user' => $user,
         ], 201);
     }
+    public function show(User $user)
+    {
+        return response()->json(['user' => $user]);
+    }
+
 
     public function updateAvatar(Request $request, User $user)
     {
