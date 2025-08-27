@@ -20,18 +20,15 @@
             $allowedValues = [20, 50, 100];
 
             if (!in_array($limit, $allowedValues)) {
-                return response()->json(['message' => 'Invalid limit'], 400);
+                $limit = 20;
             }
 
             $authors = Author::query();
-            $searchTerm = $request->query('q');
+            $searchTerm = $request->query('search-value');
 
-            if ($searchTerm) {
-                $authors = $authors->where(function ($query) use ($searchTerm) {
-                    $query->where('first_name', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('last_name', 'like', '%' . $searchTerm . '%');
-                });
-            }
+            $authors->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereAny(['first_name', 'last_name'], 'like', "%{$searchTerm}%");
+            });
 
             $authors = $authors->paginate($limit);
 
@@ -59,7 +56,6 @@
          */
         public function show(Author $author)
         {
-//            $author->load('books');
             return new AuthorResource($author);
         }
 
