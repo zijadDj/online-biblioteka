@@ -12,9 +12,25 @@
         /**
          * Display a listing of the resource.
          */
-        public function index()
+        public function index(Request $request)
         {
-            //
+            $limit = $request->query('limit', 20);
+            $allowedValues = [20, 50, 100];
+
+            if (!in_array($limit, $allowedValues)) {
+                $limit = 20;
+            }
+
+            $authors = Author::query();
+            $searchTerm = $request->query('search-value');
+
+            $authors->when($searchTerm, function ($query, $searchTerm) {
+                $query->whereAny(['first_name', 'last_name'], 'like', "%{$searchTerm}%");
+            });
+
+            $authors = $authors->paginate($limit);
+
+            return AuthorResource::collection($authors);
         }
 
         /**
@@ -24,8 +40,8 @@
         {
             $params = $request->validated();
 
-            if ($request->hasFile('photo')) {
-                $file = $request->file('photo');
+            if ($request->hasFile('picture')) {
+                $file = $request->file('picture');
                 $path = $file->store('author_pictures', 'public');
                 $params['picture'] = $path;
             }
