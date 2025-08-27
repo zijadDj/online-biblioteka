@@ -74,7 +74,7 @@ class PublisherController extends Controller
     {
         $publisher->delete();
         return response()->json([
-            "message" => "Publisher: " . $publisher['name'] . " deleted successfully"
+            "message" => "Publisher: " . $publisher->name . " deleted successfully"
         ], 200);
     }
 }
