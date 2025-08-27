@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('genre_id');
+        Schema::table('images', function (Blueprint $table) {
+            $table->string('type')->default('cover');
         });
+
     }
 
     /**
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->foreignId('genre_id');
+        Schema::table('images', function (Blueprint $table) {
+            //
         });
     }
 };
