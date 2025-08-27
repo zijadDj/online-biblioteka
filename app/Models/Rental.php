@@ -22,12 +22,13 @@ class Rental extends Model
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(User::class, 'student_id');
     }
 
     public function librarian(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'librarian_id');
     }
+
 
 }

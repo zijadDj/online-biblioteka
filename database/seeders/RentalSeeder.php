@@ -12,8 +12,8 @@ class RentalSeeder extends Seeder
 {
     public function run(): void
     {
-        $book = Book::first();
-        $student = Student::first();
+        $book = \DB::table('books')->first();
+        $student = \DB::table('users')->where('role', 'student')->first();
         $librarian = User::first();
 
         if ($book && $student && $librarian) {
