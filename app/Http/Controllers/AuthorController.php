@@ -5,7 +5,9 @@
     use App\Http\Requests\AuthorRequest;
     use App\Http\Resources\AuthorResource;
     use App\Models\Author;
+    use App\Models\Book;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Storage;
 
     class AuthorController extends Controller
     {
@@ -60,9 +62,24 @@
         /**
          * Update the specified resource in storage.
          */
-        public function update(Request $request, Author $author)
+        public function update(AuthorRequest $request, Author $author)
         {
-            //
+            $params = $request->validated();
+            $attachBookIds = $params['book_ids'];
+            $detachBookIds = $params['remove_book_ids'];
+            unset($params['remove_book_ids']);
+            unset($params['book_ids']);
+
+            if ($attachBookIds) {
+                Book::whereIn('id', $attachBookIds)->update(['author_id' => $author->id]);
+            }
+            if ($detachBookIds) {
+                Book::whereIn('id', $detachBookIds)->update(['author_id' => null]);
+            }
+
+            $author->update($params);
+            $author->load('books');
+            return new AuthorResource($author);
         }
 
         /**
@@ -70,6 +87,26 @@
          */
         public function destroy(Author $author)
         {
-            //
+            if ($author->picture && Storage::disk('public')->exists($author->picture)) {
+                Storage::disk('public')->delete($author->picture);
+            }
+            $author->delete();
+
+            return response()->json(['message' => 'Author Deleted Successfully']);
+        }
+
+
+        public function updateAvatar(Author $author, Request $request)
+        {
+            $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120'
+            ]);
+            $file = $request->file('picture');
+            if ($author->picture && Storage::disk('public')->exists($author->picture)) {
+                Storage::disk('public')->delete($author->picture);
+            }
+            $path = $file->store('author_pictures', 'public');
+            $author->update(['picture' => $path]);
+            return new AuthorResource($author);
         }
     }
