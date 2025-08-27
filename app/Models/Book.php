@@ -29,7 +29,7 @@ class Book extends Model
     {
         return $this->hasMany(Image::class);
     }
-    public function publishers():BelongsTo{
+    public function publisher():BelongsTo{
         return $this->belongsTo(Publisher::class);
     }
 
