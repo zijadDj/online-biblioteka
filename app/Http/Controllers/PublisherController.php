@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PublisherController extends Controller
 {
@@ -12,8 +13,13 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        $search = request()->input('q');
-        $perPage = request()->input('paginate', 20);
+        $validated = request()->validate([
+            'q' => ['nullable', 'string'],
+            'paginate' => ['nullable', 'integer', Rule::in([20, 50, 100])],
+        ]);
+        $search = trim($validated['q'] ?? '');
+        $perPage = $validated['paginate'] ?? 20;
+      
         $query = Publisher::query();
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -38,7 +44,8 @@ class PublisherController extends Controller
 
         return response()->json([
             'message' => "Publisher created successfully.",
-            "publisher" => $publisher], 201);
+            "publisher" => $publisher
+        ], 201);
     }
 
     /**
@@ -74,6 +81,9 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        //
+        $publisher->delete();
+        return response()->json([
+            "message" => "Publisher: " . $publisher->name . " deleted successfully"
+        ], 200);
     }
 }
