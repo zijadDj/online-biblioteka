@@ -46,12 +46,6 @@ class BookController extends Controller
                 unset($params['genre_ids']);
                 $book->genres()->syncWithoutDetaching($attachGenreIds);
             }
-            if ($request->has('remove_genre_ids')) {
-                $removeGenreIds = $request->input('remove_genre_ids');
-                unset($params['remove_genre_ids']);
-                $book->genres()->detach($removeGenreIds);
-            }
-
             DB::commit();
             $book->load('images', 'genres');
             return new BookResource($book);
@@ -80,7 +74,18 @@ class BookController extends Controller
     public function update(BookRequest $request, Book $book)
     {
         $params = $request->validated();
+        if ($request->has('genre_ids')) {
+            $attachGenreIds = $request->input('genre_ids');
+            unset($params['genre_ids']);
+            $book->genres()->syncWithoutDetaching($attachGenreIds);
+        }
+        if ($request->has('remove_genre_ids')) {
+            $removeGenreIds = $request->input('remove_genre_ids');
+            unset($params['remove_genre_ids']);
+            $book->genres()->detach($removeGenreIds);
+        }
         $book->update($params);
+        $book->load('images', 'genres');
         return new BookResource($book);
     }
 
