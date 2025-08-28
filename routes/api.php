@@ -4,16 +4,9 @@
     use App\Http\Controllers\AuthorController;
     use App\Http\Controllers\GenreController;
     use App\Http\Controllers\UserController;
-    use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
 
-    Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-Route::post('/login', [AuthController::class, 'login']);
-
-
+    Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -26,5 +19,4 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::apiResource('/authors', AuthorController::class);
     Route::post('/authors/update-image/{author}', [AuthorController::class, 'updateAvatar']);
 }
-
 );
