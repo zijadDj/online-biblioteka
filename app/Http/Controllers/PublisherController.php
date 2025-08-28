@@ -59,16 +59,29 @@ class PublisherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Publisher $publiher)
+    public function update(Request $request, Publisher $publisher)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'established_year' => 'nullable|integer'
+        ]);
+        $publisher->update($validated);
+        return response()->json(["message" => "Publisher: " . $publisher['name'] . " updated successfully",
+            "publisher:" => $publisher], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Publisher $publiher)
+    public function destroy(Publisher $publisher)
     {
-        //
+        $publisher->delete();
+        return response()->json([
+            "message" => "Publisher: " . $publisher->name . " deleted successfully"
+        ], 200);
     }
 }
