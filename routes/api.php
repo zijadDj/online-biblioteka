@@ -31,5 +31,4 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::put('/categories/{category}/icon', [CategoryController::class, 'updateIcon']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 }
-
 );
