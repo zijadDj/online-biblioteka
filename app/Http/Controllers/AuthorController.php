@@ -55,7 +55,6 @@
          */
         public function show(Author $author)
         {
-//            $author->load('books');
             return new AuthorResource($author);
         }
 
