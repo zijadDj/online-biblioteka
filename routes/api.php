@@ -23,4 +23,6 @@
         Route::get('/books/{book}/cover', [BookController::class, 'showCover']);
         Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
         Route::apiResource('authors', AuthorController::class);
+        Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
+
     });
