@@ -8,8 +8,6 @@ use App\Models\Genre;
 use Illuminate\Http\Request;
 
 
-
-
 class GenreController extends Controller
 {
     /**
@@ -28,9 +26,12 @@ class GenreController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
-    {
 
+    public function store(GenreRequest $request)
+    {
+        $params = $request->validated();
+        $genre = Genre::create($params);
+        return new GenreResource($genre);
     }
 
     /**
@@ -38,7 +39,7 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+        return new GenreResource($genre);
     }
 
     /**
@@ -46,7 +47,9 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+        $params = $request->validated();
+        $genre->update($params);
+        return new GenreResource($genre);
     }
 
     /**
@@ -54,6 +57,7 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre->delete();
+        return response()->json(['message' => 'Genre Deleted Successfully']);
     }
 }
