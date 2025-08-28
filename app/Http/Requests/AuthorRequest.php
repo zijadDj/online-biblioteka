@@ -25,7 +25,7 @@ class AuthorRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'biography' => 'required|string',
-            'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'picture' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ];
     }
 }
