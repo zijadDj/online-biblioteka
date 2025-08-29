@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\FilterBookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\Image;
@@ -15,15 +16,27 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FilterBookRequest $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+        $search  = $request->input('search-value');
+
+        $query = Book::query();
+
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        $books = $query->paginate($perPage);
+
+        return BookResource::collection($books);
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
         $params = $request->validated();
 
@@ -41,11 +54,14 @@ class BookController extends Controller
                     'book_id' => $book->id
                 ]);
             }
-
+            if ($request->has('genre_ids')) {
+                $attachGenreIds = $request->input('genre_ids');
+                unset($params['genre_ids']);
+                $book->genres()->syncWithoutDetaching($attachGenreIds);
+            }
             DB::commit();
-            $book->load('image');
+            $book->load('images', 'genres');
             return new BookResource($book);
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -71,7 +87,18 @@ class BookController extends Controller
     public function update(BookRequest $request, Book $book)
     {
         $params = $request->validated();
+        if ($request->has('genre_ids')) {
+            $attachGenreIds = $request->input('genre_ids');
+            unset($params['genre_ids']);
+            $book->genres()->syncWithoutDetaching($attachGenreIds);
+        }
+        if ($request->has('remove_genre_ids')) {
+            $removeGenreIds = $request->input('remove_genre_ids');
+            unset($params['remove_genre_ids']);
+            $book->genres()->detach($removeGenreIds);
+        }
         $book->update($params);
+        $book->load('images', 'genres');
         return new BookResource($book);
     }
 
@@ -114,7 +141,7 @@ class BookController extends Controller
                 'message' => 'Cover file does not exist on server.'
             ], 404);
         }
-        
+
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
     public function updateCover(Request $request, Book $book)
