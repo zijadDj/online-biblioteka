@@ -11,7 +11,8 @@ class Rental extends Model
         'book_id',
         'student_id',
         'librarian_id',
-        'rented_at',
+        'action_type',
+        'recorded_at',
         'returned_at',
     ];
 

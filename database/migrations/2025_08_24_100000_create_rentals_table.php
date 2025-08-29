@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('librarian_id')->constrained('users')->onDelete('cascade');
-            $table->timestamp('rented_at');
+            $table->enum('action_type', ['discard', 'return', 'rent'])->default('rent');
+            $table->timestamp('recorded_at');
             $table->timestamp('returned_at')->nullable();
             $table->timestamps();
         });
