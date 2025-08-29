@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\FilterBookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\Image;
@@ -15,10 +16,22 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FilterBookRequest $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+        $search  = $request->input('search-value');
+
+        $query = Book::query();
+
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        $books = $query->paginate($perPage);
+
+        return BookResource::collection($books);
     }
+
 
     /**
      * Store a newly created resource in storage.
