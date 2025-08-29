@@ -19,7 +19,7 @@ class PublisherController extends Controller
         ]);
         $search = trim($validated['q'] ?? '');
         $perPage = $validated['paginate'] ?? 20;
-      
+
         $query = Publisher::query();
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -70,8 +70,10 @@ class PublisherController extends Controller
             'established_year' => 'nullable|integer'
         ]);
         $publisher->update($validated);
-        return response()->json(["message" => "Publisher: " . $publisher['name'] . " updated successfully",
-            "publisher:" => $publisher], 201);
+        return response()->json([
+            "message" => "Publisher: " . $publisher->name . " updated successfully",
+            "publisher:" => $publisher
+        ], 201);
     }
 
     /**
