@@ -17,5 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(BookSeeder::class);
         $this->call(ImageSeeder::class);
 
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            ['name' => 'Test User']
+        );
+
+
+        $this->call(RentalSeeder::class);
     }
 }
