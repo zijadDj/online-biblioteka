@@ -47,8 +47,8 @@ class CategoryController extends Controller
 
         return response()->json([
                 'message' => 'Category created successfully.',
-                'category' => $category]
-            , 201);
+                'category' => $category
+        ], 201);
     }
 
     public function icon(Category $category)
@@ -59,9 +59,9 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        return response()->json(["category" => $category]);
     }
 
     /**
@@ -73,14 +73,16 @@ class CategoryController extends Controller
             'name' => 'sometimes|string|max:500',
             'description' => 'sometimes|string|max:500',
             'icon' => 'sometimes|image|max:5120',
-          
-         $category->update($validated);
-
+        ]);
+      
+        $category->update($validated);
+      
         return response()->json([
                 'message' => 'Category updated successfully.',
                 'category' => $category->fresh()
         ], 200);
     }
+
 
     public function updateIcon(Request $request, Category $category)
     {
@@ -98,7 +100,6 @@ class CategoryController extends Controller
             'category' => $category->fresh(),
         ], 200);
     }
-
     /**
      * Remove the specified resource from storage.
      */
