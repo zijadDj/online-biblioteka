@@ -5,7 +5,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Http\Resources\Json\JsonResource;
 
-    class ImageResource extends JsonResource
+    class AuthorResource extends JsonResource
     {
         /**
          * Transform the resource into an array.
@@ -16,11 +16,11 @@
         {
             return [
                 'id' => $this->id,
-                'book_id' => $this->book_id,
-                'type' => $this->type,
-                'path' => $this->path,
-                'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'biography' => $this->biography,
+                'picture' => $this->picture,
+//                'books' => $this->whenLoaded('books')
             ];
         }
     }

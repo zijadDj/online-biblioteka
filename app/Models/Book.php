@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
-    use HasFactory;
     protected  $fillable = [
         'name',
         'description',
@@ -18,17 +17,17 @@ class Book extends Model
         'language',
         'binding',
         'script',
-        'dimensions',
+        'dimensions'
     ];
+    public function genres(): BelongsToMany{
+        return $this->belongsToMany(Genre::class);
+    }
 
-
-
-    public function images()
+    public function images(): HasMany
     {
-        return $this->hasMany(Image::class);
+        return $this->HasMany(Image::class);
     }
 
     public function categories():belongsToMany{
         return $this->belongsToMany(Category::class);
     }
-}
