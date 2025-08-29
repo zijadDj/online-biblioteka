@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -72,13 +73,13 @@ class CategoryController extends Controller
             'name' => 'sometimes|string|max:500',
             'description' => 'sometimes|string|max:500',
             'icon' => 'sometimes|image|max:5120',
-        ]);
-        $category->update($validated);
+          
+         $category->update($validated);
 
         return response()->json([
                 'message' => 'Category updated successfully.',
-                'category' => $category->fresh()]
-            , 200);
+                'category' => $category->fresh()
+        ], 200);
     }
 
     public function updateIcon(Request $request, Category $category)
@@ -101,8 +102,14 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        if ($category->icon_path && Storage::disk('public')->exists($category->icon_path)) {
+            Storage::disk('public')->delete($category->icon_path);
+        }
+        $category->delete();
+        return response()->json([
+            'message' => "Category: $category->name deleted successfully.",
+        ]);
     }
 }
