@@ -79,8 +79,8 @@ class CategoryController extends Controller
       
         return response()->json([
                 'message' => 'Category updated successfully.',
-                'category' => $category->fresh()]
-            , 200);
+                'category' => $category->fresh()
+        ], 200);
     }
 
 
@@ -105,17 +105,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if (Storage::disk('public')->exists($category['icon_path'])) {
-            Storage::disk('public')->delete($category['icon_path']);
-            $category->delete();
-            return response()->json([
-                'message' => 'Category and icon deleted successfully.',
-            ], 200);
+        if ($category->icon_path && Storage::disk('public')->exists($category->icon_path)) {
+            Storage::disk('public')->delete($category->icon_path);
         }
-
         $category->delete();
         return response()->json([
-            'message' => 'Category deleted successfully.',
+            'message' => "Category: $category->name deleted successfully.",
         ]);
     }
 }
