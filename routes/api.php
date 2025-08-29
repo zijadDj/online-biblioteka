@@ -25,4 +25,5 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
     Route::apiResource('authors', AuthorController::class);
     Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
+    Route::post('/rentals/{book}', [BookController::class, 'handleRentals']);
 });

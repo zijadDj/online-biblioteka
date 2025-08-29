@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Http\Requests\FilterBookRequest;
+use App\Http\Requests\RentalRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\Image;
+use App\Models\Rental;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -173,5 +175,26 @@ class BookController extends Controller
         return response()->json([
             'message' => 'No image file provided'
         ], 400);
+    }
+
+    public function handleRentals(Book $book, RentalRequest $request)
+    {
+        $params = $request->validated();
+        $actionType = $params['action_type'];
+        $rental = Rental::create([
+            'book_id' => $book->id,
+            'librarian_id' => auth()->id(),
+            'action_type' => $actionType,
+            'student_id' => $params['student_id'],
+            'recorded_at' => now()
+        ]);
+        $unitCount = $book['unit_count'];
+        if ($actionType === 'return') {
+            $book->update(['unit_count' => $unitCount + 1]);
+        }
+        if ($actionType === 'rent') {
+            $book->update(['unit_count' => $unitCount - 1]);
+        }
+        return $rental;
     }
 }

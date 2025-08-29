@@ -13,7 +13,6 @@ class Rental extends Model
         'librarian_id',
         'action_type',
         'recorded_at',
-        'returned_at',
     ];
 
     public function book(): BelongsTo
