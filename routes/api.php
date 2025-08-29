@@ -1,6 +1,7 @@
 <?php
 
     use App\Http\Controllers\AuthController;
+    use App\Http\Controllers\AuthorController;
     use App\Http\Controllers\BookController;
     use App\Http\Controllers\GenreController;
     use App\Http\Controllers\UserController;
@@ -21,4 +22,7 @@
         Route::apiResource('genres', GenreController::class);
         Route::get('/books/{book}/cover', [BookController::class, 'showCover']);
         Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
+        Route::apiResource('authors', AuthorController::class);
+        Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
+
     });
