@@ -18,7 +18,7 @@ class Book extends Model
         'binding',
         'script',
         'dimensions',
-        'available_copies',
+        'available_copies', 
     ];
 
     public function genres(): BelongsToMany

@@ -44,3 +44,4 @@ class Rental extends Model
         return $this->days_rented > $limitDays;
     }
 }
+

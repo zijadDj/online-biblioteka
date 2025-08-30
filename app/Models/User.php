@@ -19,6 +19,10 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+
+    public const ROLE_LIBRARIAN = '1';
+    public const ROLE_STUDENT = '0';
     protected $fillable = [
         'name',
         'surname',
