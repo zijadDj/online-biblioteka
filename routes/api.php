@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,5 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
     Route::apiResource('authors', AuthorController::class);
     Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
+    Route::apiResource('rentals', RentalController::class);
 });
