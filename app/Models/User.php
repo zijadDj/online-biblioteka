@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Rental;
 
 class User extends Authenticatable
 {
@@ -50,4 +51,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    //
+
+    public function rentalsAsStudent()
+    {
+        return $this->hasMany(Rental::class, 'student_id');
+    }
+
+    public function rentalsAsLibrarian()
+    {
+        return $this->hasMany(Rental::class, 'librarian_id');
+    }
+
 }

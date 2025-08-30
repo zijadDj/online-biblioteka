@@ -6,6 +6,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RentalController;
+use App\Models\Rental;
+
+Route::post('/rentals', [RentalController::class, 'store']);
+Route::get('/rentals/{id}', function ($id) {
+    return Rental::findOrFail($id);
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
