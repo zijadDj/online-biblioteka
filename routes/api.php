@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::get('/books/rented', [RentalController::class, 'rented']);
     Route::apiResource('books', BookController::class);
     Route::post('/books/{book}/cover', [BookController::class, 'store']);
     Route::apiResource('genres', GenreController::class);
@@ -26,5 +27,4 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
     Route::apiResource('authors', AuthorController::class);
     Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
-    Route::apiResource('rentals', RentalController::class);
 });

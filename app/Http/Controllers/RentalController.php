@@ -8,7 +8,7 @@ use App\Models\Rental;
 
 class RentalController extends Controller
 {
-    public function index(RentalIndexRequest $request)
+    public function rented(RentalIndexRequest $request)
     {
         $query = Rental::with(['book', 'student', 'librarian'])
             ->whereNull('returned_at');
