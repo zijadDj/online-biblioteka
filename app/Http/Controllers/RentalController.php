@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RentalIndexRequest;
 use App\Http\Resources\RentalResource;
+use App\Models\Policy;
 use App\Models\Rental;
 
 class RentalController extends Controller
@@ -33,7 +34,7 @@ class RentalController extends Controller
 
         if ($search = $request->input('search')) {
             $query->whereHas('book', function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%");
             });
         }
 
@@ -46,7 +47,8 @@ class RentalController extends Controller
 
     public function overdue(RentalIndexRequest $request)
     {
-        $maxDays = 14;
+        $policy = Policy::where('name', 'Rental period')->first();
+        $maxDays = $policy ? $policy->period : 30;
 
         $query = Rental::with(['book', 'student', 'librarian'])
             ->whereNull('returned_at')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Policy;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
 
@@ -9,8 +10,10 @@ class RentalResource extends JsonResource
 {
     public function toArray($request)
     {
+        $policy = Policy::where('name', 'Rental period')->first();
+        $maxDays = $policy ? $policy->period : 30;
+
         $daysRented = Carbon::parse($this->rented_at)->diffInDays(now());
-        $maxDays = 14;
         $overdue = $daysRented - $maxDays;
 
         return [
