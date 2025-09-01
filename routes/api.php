@@ -21,6 +21,7 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::get('/books/rented', [RentalController::class, 'rented']);
     Route::get('/books/returned', [RentalController::class, 'returned']);
+    Route::get('/books/overdue', [RentalController::class, 'overdue']);
     Route::apiResource('books', BookController::class);
     Route::post('/books/{book}/cover', [BookController::class, 'store']);
     Route::apiResource('genres', GenreController::class);

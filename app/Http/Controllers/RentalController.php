@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RentalIndexRequest;
 use App\Http\Resources\RentalResource;
+use App\Models\Policy;
 use App\Models\Rental;
 
 class RentalController extends Controller
@@ -33,7 +34,29 @@ class RentalController extends Controller
 
         if ($search = $request->input('search')) {
             $query->whereHas('book', function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->input('per_page', 20);
+
+        $rentals = $query->paginate($perPage);
+
+        return RentalResource::collection($rentals);
+    }
+
+    public function overdue(RentalIndexRequest $request)
+    {
+        $policy = Policy::where('name', 'Rental period')->first();
+        $maxDays = $policy ? $policy->period : 30;
+
+        $query = Rental::with(['book', 'student', 'librarian'])
+            ->whereNull('returned_at')
+            ->where('rented_at', '<', now()->subDays($maxDays));
+
+        if($search = $request->input('search')) {
+            $query->whereHas('book', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
             });
         }
 
