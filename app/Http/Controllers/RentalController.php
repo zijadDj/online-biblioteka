@@ -25,4 +25,23 @@ class RentalController extends Controller
 
         return RentalResource::collection($rentals);
     }
+
+    public function returned(RentalIndexRequest $request)
+    {
+        $query = Rental::with(['book', 'student', 'librarian'])
+            ->whereNotNull('returned_at');
+
+        if ($search = $request->input('search')) {
+            $query->whereHas('book', function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->input('per_page', 20);
+
+        $rentals = $query->paginate($perPage);
+
+        return RentalResource::collection($rentals);
+    }
+
 }

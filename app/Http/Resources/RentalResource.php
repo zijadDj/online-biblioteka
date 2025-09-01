@@ -16,6 +16,7 @@ class RentalResource extends JsonResource
             'librarian' => $this->librarian->name,
             'rented_at' => $this->rented_at,
             'active_days' => Carbon::parse($this->rented_at)->diffInDays(now()),
+            'returned_at' => $this->returned_at,
         ];
     }
 }
