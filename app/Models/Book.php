@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Book extends Model
 {
     use HasFactory;
-    protected  $fillable = [
+
+    protected $fillable = [
         'name',
         'description',
         'page_count',
@@ -21,15 +22,17 @@ class Book extends Model
         'binding',
         'script',
         'dimensions',
+        'publisher_id',
     ];
-
 
 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
-    public function publisher():BelongsTo{
+
+    public function publisher(): BelongsTo
+    {
         return $this->belongsTo(Publisher::class);
     }
 

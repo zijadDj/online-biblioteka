@@ -71,8 +71,8 @@ class PublisherController extends Controller
         ]);
         $publisher->update($validated);
         return response()->json([
-            "message" => "Publisher: " . $publisher->name . " updated successfully",
-            "publisher:" => $publisher
+            "message" => "Publisher " . $publisher->name . " updated successfully",
+            "publisher" => $publisher
         ], 201);
     }
 
