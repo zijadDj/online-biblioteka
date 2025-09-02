@@ -3,10 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\LibrarianCreated;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Mail;
 
 class SendSetPasswordEmail
 {
@@ -23,9 +20,11 @@ class SendSetPasswordEmail
      */
     public function handle(LibrarianCreated $event): void
     {
-        $librarian=$event->librarian;
+        $user = $event->librarian;
 
-        $token= Password::broker('librarians')->createToken($librarian);
-        $librarian->sendPasswordResetNotification($token);
+        if (!$user || !$user->is_librarian) {
+            return;
+        }
+        Password::sendResetLink(['email' => $user->email]);
     }
 }
