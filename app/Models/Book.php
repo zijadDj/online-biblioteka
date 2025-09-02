@@ -18,7 +18,7 @@ class Book extends Model
         'binding',
         'script',
         'dimensions',
-        'available_copies', 
+        'available_copies',
     ];
 
     public function genres(): BelongsToMany
@@ -34,5 +34,11 @@ class Book extends Model
     public function rentals(): HasMany
     {
         return $this->hasMany(Rental::class);
+    }
+
+
+    public function discardedRecords()
+    {
+    return $this->hasMany(DiscardedBook::class);
     }
 }
