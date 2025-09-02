@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Carbon\Carbon;
 
 class Rental extends Model
 {
@@ -16,6 +17,8 @@ class Rental extends Model
         'rented_at',
         'returned_at',
     ];
+
+    protected $appends = ['days_rented', 'is_overdue'];
 
     public function book(): BelongsTo
     {
@@ -32,5 +35,15 @@ class Rental extends Model
         return $this->belongsTo(User::class, 'librarian_id');
     }
 
+    public function getDaysRentedAttribute()
+    {
+        return Carbon::parse($this->rented_at)->diffInDays(now(), false);
+    }
 
+    public function getIsOverdueAttribute()
+    {
+        $limitDays = 10;
+        return $this->days_rented > $limitDays;
+    }
 }
+
