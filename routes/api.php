@@ -3,9 +3,11 @@
     use App\Http\Controllers\AuthorController;
     use App\Http\Controllers\BookController;
     use App\Http\Controllers\GenreController;
+    use App\Http\Controllers\PublisherController;
     use App\Http\Controllers\UserController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\CategoryController;
+
 
 
     Route::post('/login', [AuthController::class, 'login']);
@@ -32,4 +34,6 @@
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::put('/categories/{category}/icon', [CategoryController::class, 'updateIcon']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+        Route::apiResource('publishers', PublisherController::class);
+        Route::post('/books/import', [BookController::class, 'import']);
     });
