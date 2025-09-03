@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('page_count');
             $table->integer('unit_count');
-            $table->string('isbn');
+            $table->string('isbn')->unique();
             $table->string('language');
             $table->enum('binding', ['hardcover', 'paperback', 'spiral_bound']);
             $table->enum('script', ['latin', 'cyrillic', 'arabic']);
