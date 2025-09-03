@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LibrarianPasswordResetController;
 use App\Models\User;
 use App\Events\LibrarianCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LibrarianPasswordResetController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -14,21 +14,14 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/create-librarian', function (Request $request) {
-    $user = User::create([
-        'name' => $request->input('name'),
-        'surname'=> $request->input('surname') ?? '',
-        'email' => $request->input('email'),
-        'password' => bcrypt($request->input('password')) ?? '',
-        'photo_path' => $request->input('photo_path') ?? '',
-        'jmbg' => $request->input('jmbg') ?? random_int(1, 999),
-    ]);
-    event(new LibrarianCreated($user));
-    return response()->json(['message' => 'Librarian created and event fired.']);
-});
+// Ruta za kreiranje librarian-a (OL-94 pristup - kroz kontroler)
+Route::post('/create-librarian', [UserController::class, 'store']);
+
+// Rute za reset lozinke (OL-87)
 Route::post('/librarian/request-password-reset', [LibrarianPasswordResetController::class, 'request']);
 Route::post('/librarian/reset-password', [LibrarianPasswordResetController::class, 'reset']);
-    Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
+
+Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);

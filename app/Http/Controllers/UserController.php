@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LibrarianCreated;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\FilterUserRequest;
 use App\Models\User;
@@ -44,7 +45,6 @@ class UserController extends Controller
         $data = $request->validated();
 
         $photoPath = "default.jpg";
-
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('photos', 'public');
         }
@@ -58,6 +58,10 @@ class UserController extends Controller
             'is_librarian' => $data['role'] === 'librarian' ? User::ROLE_LIBRARIAN : User::ROLE_STUDENT,
             'password' => Hash::make($data['password']),
         ]);
+
+        if ($data['role'] === 'librarian') {
+            event(new LibrarianCreated($user));
+        }
 
         return response()->json([
             'message' => 'User created successfully.',
