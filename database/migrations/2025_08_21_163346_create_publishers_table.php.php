@@ -13,7 +13,7 @@
         {
             Schema::create('publishers', function (Blueprint $table) {
                 $table->id();
-                $table->string('name')->nullable();
+                $table->string('name');
                 $table->text('address')->nullable();
                 $table->string('website')->nullable();
                 $table->string('email')->nullable();
