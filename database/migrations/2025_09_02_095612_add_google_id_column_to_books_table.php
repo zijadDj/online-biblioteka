@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('books', function (Blueprint $table) {
             $table->string('google_id')->after('id')->nullable();
-            $table->foreignId('publisher_id')->nullable()->constrained()->cascadeOnDelete();
 
         });
     }
@@ -25,7 +24,6 @@ return new class extends Migration
     {
         Schema::table('books', function (Blueprint $table) {
             $table->dropColumn('google_id');
-            $table->dropForeign('publisher_id');
         });
     }
 };
