@@ -24,6 +24,6 @@ class LibrarianResetPasswordNotification extends Notification
         $resetUrl = url("/librarian/reset-password-form?token={$this->token}&email={$notifiable->email}");
 
         return (new MailMessage)
-            ->view('emails.set-password', ['resetUrl' => $resetUrl]);
+            ->markdown('emails.set-password', ['resetUrl' => $resetUrl]);
     }
 }

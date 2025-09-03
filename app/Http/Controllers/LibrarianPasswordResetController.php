@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 
 class LibrarianPasswordResetController extends Controller
 {
     public function request(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:librarians,email',
+            'email' => 'required|email|exists:users,email',
         ]);
 
         if ($validator->fails()) {
@@ -23,7 +23,15 @@ class LibrarianPasswordResetController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+        $user = User::where('email', $request->email)
+            ->where('is_librarian', 1)
+            ->first();
 
+        if (!$user) {
+            return response()->json([
+                'message' => 'User is not a librarian.'
+            ], 422);
+        }
         $status = Password::broker('librarians')->sendResetLink(
             $request->only('email')
         );
@@ -40,15 +48,26 @@ class LibrarianPasswordResetController extends Controller
     public function reset(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:librarians,email',
+            'email' => 'required|email|exists:users,email',
             'token' => 'required',
             'password' => 'required|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors()
+            ], 422);
         }
+        $user = User::where('email', $request->email)
+            ->where('is_librarian', 1)
+            ->first();
 
+        if (!$user) {
+            return response()->json([
+                'message' => 'User is not a librarian.'
+            ], 422);
+        }
         $status = Password::broker('librarians')->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($librarian, $password) {
@@ -56,18 +75,17 @@ class LibrarianPasswordResetController extends Controller
                 $librarian->save();
 
                 Auth::guard('librarian')->login($librarian);
-
-
             }
         );
 
-
-
         if ($status === Password::PASSWORD_RESET) {
-            return redirect('/librarian/dashboard')->with('success', 'Dobrodošli nazad!');
-
+            return response()->json([
+                'message' => 'Password has been reset successfully.'
+            ]);
         }
 
-        return redirect()->back()->withErrors(['token' => 'Token je nevažeći ili istekao.']);
+        return response()->json([
+            'message' => 'Token is invalid or has expired.'
+        ], 422);
     }
 }

@@ -7,9 +7,9 @@
         Resetuj lozinku
     @endcomponent
 
-
     Ako niste tražili reset lozinke, slobodno ignorišite ovaj email.
 
     Pozdrav,<br>
     {{ config('app.name') }}
 @endcomponent
+

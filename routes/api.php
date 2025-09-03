@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Events\LibrarianCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LibrarianPasswordResetController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,8 +26,9 @@ Route::post('/create-librarian', function (Request $request) {
     event(new LibrarianCreated($user));
     return response()->json(['message' => 'Librarian created and event fired.']);
 });
-
-Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
+Route::post('/librarian/request-password-reset', [LibrarianPasswordResetController::class, 'request']);
+Route::post('/librarian/reset-password', [LibrarianPasswordResetController::class, 'reset']);
+    Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users', [UserController::class, 'index']);
