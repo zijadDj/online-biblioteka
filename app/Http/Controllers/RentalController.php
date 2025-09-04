@@ -90,4 +90,25 @@ class RentalController extends Controller
             'message' => 'Book rented successfully'
         ], 201);
     }
+
+    public function stats()
+    {
+        $rentalPolicy = Policy::where('name', 'Rental period')->first();
+        $days = $rentalPolicy?->period ?? 30;
+
+        $activeRentals = Rental::whereNull('returned_at')
+            ->where('rented_at', '>=', now()->subDays($days))
+            ->count();
+
+
+        $overdueRentals = Rental::whereNull('returned_at')
+            ->where('rented_at', '<', now()->subDays($days))
+            ->count();
+
+        return response()->json([
+            'active_rentals' => $activeRentals,
+            'overdue_rentals' => $overdueRentals,
+        ]);
+    }
+
 }
