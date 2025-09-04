@@ -34,6 +34,10 @@
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::put('/categories/{category}/icon', [CategoryController::class, 'updateIcon']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-        Route::apiResource('publishers', PublisherController::class);
-        Route::post('/books/import', [BookController::class, 'import']);
-    });
+        Route::get('/publishers', [PublisherController::class, 'index']);
+        Route::post('/publishers', [PublisherController::class, 'store']);
+        Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
+        Route::put('/publishers/{publisher}', [PublisherController::class, 'update']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
+    }
+);
