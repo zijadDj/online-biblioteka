@@ -4,12 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -28,6 +22,4 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
     Route::put('/publishers/{publisher}', [PublisherController::class, 'update']);
     Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
-}
-
-);
+});
