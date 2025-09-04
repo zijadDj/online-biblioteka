@@ -59,6 +59,12 @@ class BookController extends Controller
                 unset($params['genre_ids']);
                 $book->genres()->syncWithoutDetaching($attachGenreIds);
             }
+            if ($request->has('remove_genre_ids')) {
+                $removeGenreIds = $request->input('remove_genre_ids');
+                unset($params['remove_genre_ids']);
+                $book->genres()->detach($removeGenreIds);
+            }
+
             DB::commit();
             $book->load('images', 'genres');
             return new BookResource($book);
@@ -78,6 +84,14 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $book = Book::find($book);
+
+        if (!$book) {
+            return response()->json([
+                'message' => 'Book not found.'
+            ], 404);
+        }
+        $book->load('images', 'genres');
         return new BookResource($book);
     }
 
@@ -144,6 +158,7 @@ class BookController extends Controller
 
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
+
     public function updateCover(Request $request, Book $book)
     {
         $request->validate([
