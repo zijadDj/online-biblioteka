@@ -6,6 +6,7 @@
     use App\Http\Controllers\UserController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\CategoryController;
+    use App\Http\Controllers\PublisherController;
 
 
     Route::post('/login', [AuthController::class, 'login']);
@@ -32,4 +33,10 @@
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::put('/categories/{category}/icon', [CategoryController::class, 'updateIcon']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-    });
+        Route::get('/publishers', [PublisherController::class, 'index']);
+        Route::post('/publishers', [PublisherController::class, 'store']);
+        Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
+        Route::put('/publishers/{publisher}', [PublisherController::class, 'update']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
+    }
+);
