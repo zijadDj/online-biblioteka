@@ -197,7 +197,7 @@ class BookController extends Controller
     {
         ImportBooks::dispatch(auth()->user());
         return response()->json([
-            'message' => 'Books imported successfully'
+            'message' => 'Books import job initialised successfully!'
         ]);
     }
 }
