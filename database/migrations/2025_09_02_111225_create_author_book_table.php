@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->foreignId('publisher_id')->nullable()->constrained()->onDelete('set null');
+        Schema::create('author_book', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('author_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('book_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('publisher_id');
-        });
+        Schema::dropIfExists('author_book');
     }
 };

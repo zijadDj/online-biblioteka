@@ -3,11 +3,10 @@
     use App\Http\Controllers\AuthorController;
     use App\Http\Controllers\BookController;
     use App\Http\Controllers\GenreController;
+    use App\Http\Controllers\PublisherController;
     use App\Http\Controllers\UserController;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\CategoryController;
-    use App\Http\Controllers\PublisherController;
-
 
     Route::post('/login', [AuthController::class, 'login']);
     Route::middleware(['auth:sanctum', 'librarian'])->group(function () {

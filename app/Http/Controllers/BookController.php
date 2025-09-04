@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookRequest;
 use App\Http\Requests\FilterBookRequest;
 use App\Http\Resources\BookResource;
+use App\Jobs\ImportBooks;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class BookController extends Controller
     public function index(FilterBookRequest $request)
     {
         $perPage = $request->input('per_page', 20);
-        $search  = $request->input('search-value');
+        $search = $request->input('search-value');
 
         $query = Book::query();
 
@@ -54,11 +55,13 @@ class BookController extends Controller
                     'book_id' => $book->id
                 ]);
             }
+
             if ($request->has('genre_ids')) {
                 $attachGenreIds = $request->input('genre_ids');
                 unset($params['genre_ids']);
                 $book->genres()->syncWithoutDetaching($attachGenreIds);
             }
+
             if ($request->has('remove_genre_ids')) {
                 $removeGenreIds = $request->input('remove_genre_ids');
                 unset($params['remove_genre_ids']);
@@ -188,5 +191,13 @@ class BookController extends Controller
         return response()->json([
             'message' => 'No image file provided'
         ], 400);
+    }
+
+    public function import()
+    {
+        ImportBooks::dispatch(auth()->user());
+        return response()->json([
+            'message' => 'Books import job initialised successfully!'
+        ]);
     }
 }
