@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Publisher extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'address',
@@ -19,11 +20,13 @@ class Publisher extends Model
         'established_year',
     ];
 
-    public function books():HasMany{
+    public function books(): HasMany
+    {
         return $this->hasMany(Book::class);
     }
 
-    public function authors():BelongsToMany{
+    public function authors(): BelongsToMany
+    {
         return $this->belongsToMany(Author::class);
     }
 }

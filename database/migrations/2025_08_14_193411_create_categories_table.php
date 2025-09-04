@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->foreignId('publisher_id')->nullable()->constrained()->onDelete('set null');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name',500);
+            $table->string('description',500);
+            $table->string('icon_path')->nullable();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('publisher_id');
-        });
+        Schema::dropIfExists('categories');
     }
 };

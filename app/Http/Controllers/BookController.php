@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
+use App\Http\Requests\FilterBookRequest;
 use App\Http\Resources\BookResource;
+use App\Jobs\ImportBooks;
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -15,10 +17,22 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FilterBookRequest $request)
     {
-        //
+        $perPage = $request->input('per_page', 20);
+        $search = $request->input('search-value');
+
+        $query = Book::query();
+
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        $books = $query->paginate($perPage);
+
+        return BookResource::collection($books);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,11 +55,13 @@ class BookController extends Controller
                     'book_id' => $book->id
                 ]);
             }
+
             if ($request->has('genre_ids')) {
                 $attachGenreIds = $request->input('genre_ids');
                 unset($params['genre_ids']);
                 $book->genres()->syncWithoutDetaching($attachGenreIds);
             }
+
             if ($request->has('remove_genre_ids')) {
                 $removeGenreIds = $request->input('remove_genre_ids');
                 unset($params['remove_genre_ids']);
@@ -106,16 +122,28 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        //
+        foreach ($book->images as $image) {
+            $coverPath = 'covers/' . ltrim($image->path, '/');
+
+            if (Storage::disk('public')->exists($coverPath)) {
+                Storage::disk('public')->delete($coverPath);
+            }
+
+            $image->delete();
+        }
+
+        $book->delete();
+
+        return response()->json([
+            'message' => 'Book and associated images deleted successfully.'
+        ], 200);
     }
 
-    public function showCover($bookId)
+    public function showCover(Book $book)
     {
-        $image = Image::where('book_id', $bookId)
-            ->where('type', 'cover')
-            ->first();
+        $image = $book->images()->where('type', 'cover')->first();
 
         if (!$image) {
             return response()->json([
@@ -131,7 +159,6 @@ class BookController extends Controller
             ], 404);
         }
 
-        // Return the file
         return response()->file(storage_path("app/public/{$coverPath}"));
     }
 
@@ -164,5 +191,13 @@ class BookController extends Controller
         return response()->json([
             'message' => 'No image file provided'
         ], 400);
+    }
+
+    public function import()
+    {
+        ImportBooks::dispatch(auth()->user());
+        return response()->json([
+            'message' => 'Books import job initialised successfully!'
+        ]);
     }
 }
