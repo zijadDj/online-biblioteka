@@ -8,8 +8,6 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\CategoryController;
 
-
-
     Route::post('/login', [AuthController::class, 'login']);
     Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
