@@ -19,7 +19,7 @@ class RentalController extends Controller
         ->where('student_id', $student_id)
             ->get();
 
-        return response()->json($rentals);
+        return RentalResource::collection($rentals);
     }
 
     public function rented(RentalIndexRequest $request)
