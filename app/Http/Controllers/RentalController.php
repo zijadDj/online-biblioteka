@@ -8,6 +8,8 @@ use App\Models\Policy;
 use App\Models\Rental;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use function Laravel\Prompts\warning;
 
 class RentalController extends Controller
 {
@@ -73,8 +75,15 @@ class RentalController extends Controller
         ];
 
         if ($overdue > 0) {
+            $rental->update([
+                'is_overdue' => true,
+                'days_overdue' => $overdue,
+            ]);
+            Log::info("Rental {$rental->id} is overdue by {$overdue} days.");
+
             $response['overdue'] = $overdue . " days";
         }
+
 
         return response()->json($response, 200);
     }
