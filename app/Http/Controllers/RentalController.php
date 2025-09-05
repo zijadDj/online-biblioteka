@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\DB;
 
 class RentalController extends Controller
 {
+
+    public function rentedByStudent($student_id)
+    {
+        $rentals = Rental::with('book')
+        ->where('student_id', $student_id)
+            ->get();
+
+        return response()->json($rentals);
+    }
+
     public function rented(RentalIndexRequest $request)
     {
         $query = Rental::with(['book', 'student', 'librarian'])
