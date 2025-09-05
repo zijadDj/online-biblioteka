@@ -12,16 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class RentalController extends Controller
 {
-
-    public function rentedByStudent($student_id)
-    {
-        $rentals = Rental::with('book')
-        ->where('student_id', $student_id)
-            ->get();
-
-        return RentalResource::collection($rentals);
-    }
-
     public function rented(RentalIndexRequest $request)
     {
         $query = Rental::with(['book', 'student', 'librarian'])
@@ -32,6 +22,13 @@ class RentalController extends Controller
                 $q->where('name', 'like', "%{$search}%");
             });
         }
+
+        if ($searchUser = $request->input('search_user')) {
+            $query->whereHas('student', function ($q) use ($searchUser) {
+                $q->where('name', 'like', "%{$searchUser}%");
+            });
+        }
+
 
         $perPage = $request->input('per_page', 20);
 
