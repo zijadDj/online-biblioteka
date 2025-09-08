@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsLibrarian;
 use Illuminate\Http\Request;
@@ -31,6 +32,9 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::put('/user/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
+    Route::get('/books/rented', [RentalController::class, 'rented']);
+    Route::get('/books/returned', [RentalController::class, 'returned']);
+    Route::get('/books/overdue', [RentalController::class, 'overdue']);
     Route::apiResource('books', BookController::class);
     Route::post('/books/{book}/cover', [BookController::class, 'store']);
     Route::apiResource('genres', GenreController::class);
