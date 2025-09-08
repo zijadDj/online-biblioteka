@@ -14,13 +14,17 @@ class RentalController extends Controller
 {
     public function rented(RentalIndexRequest $request)
     {
-        $query = Rental::with(['book', 'student', 'librarian'])
-            ->whereNull('returned_at');
+        $query = Rental::with(['book', 'student', 'librarian']);
 
-        if ($search = $request->input('search')) {
-            $query->whereHas('book', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+        if ($search = $request->input('book_title')) {
+            $query->whereNull('returned_at')
+                ->whereHas('book', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+        }
+
+        if ($bookId = $request->input('book_id')) {
+            $query->where('book_id', $bookId);
         }
 
         $perPage = $request->input('per_page', 20);
