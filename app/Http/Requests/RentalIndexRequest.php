@@ -15,7 +15,7 @@ class RentalIndexRequest extends FormRequest
     {
         return [
             'search' => 'nullable|string|max:255',
-            'search_user' => 'nullable|string|max:255',
+            'user_id' => 'nullable|integer|exists:users,id',
             'per_page' => 'nullable|in:20,50,100',
         ];
     }

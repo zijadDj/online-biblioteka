@@ -14,8 +14,7 @@ class RentalController extends Controller
 {
     public function rented(RentalIndexRequest $request)
     {
-        $query = Rental::with(['book', 'student', 'librarian'])
-            ->whereNull('returned_at');
+        $query = Rental::with(['book', 'student', 'librarian']);
 
         if ($search = $request->input('search')) {
             $query->whereHas('book', function($q) use ($search) {
@@ -23,10 +22,10 @@ class RentalController extends Controller
             });
         }
 
-        if ($searchUser = $request->input('search_user')) {
-            $query->whereHas('student', function ($q) use ($searchUser) {
-                $q->where('name', 'like', "%{$searchUser}%");
-            });
+        if ($userId = $request->input('user_id')) {
+            $query->where('student_id', $userId);
+        } else {
+            $query->whereNull('returned_at');
         }
 
 
