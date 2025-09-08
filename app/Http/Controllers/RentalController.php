@@ -34,15 +34,6 @@ class RentalController extends Controller
         return RentalResource::collection($rentals);
     }
 
-    public function historyByBook(Book $book)
-    {
-        $rentals = Rental::with(['book', 'student', 'librarian'])
-            ->where('book_id', $book->id)
-            ->get();
-
-        return RentalResource::collection($rentals);
-    }
-
     public function returned(RentalIndexRequest $request)
     {
         $query = Rental::with(['book', 'student', 'librarian'])

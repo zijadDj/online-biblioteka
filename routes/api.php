@@ -34,7 +34,6 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::post('/update-avatar/{user}', [UserController::class, 'updateAvatar']);
     Route::get('/books/rented', [RentalController::class, 'rented']);
-    Route::get('/books/{book}/rented', [RentalController::class, 'historyByBook']);
     Route::get('/books/returned', [RentalController::class, 'returned']);
     Route::get('/books/overdue', [RentalController::class, 'overdue']);
     Route::apiResource('books', BookController::class);
