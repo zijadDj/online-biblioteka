@@ -14,7 +14,8 @@ class RentalController extends Controller
 {
     public function rented(RentalIndexRequest $request)
     {
-        $query = Rental::with(['book', 'student', 'librarian']);
+        $query = Rental::with(['book', 'student', 'librarian'])
+            ->whereNull('returned_at');
 
         if ($search = $request->input('search')) {
             $query->whereHas('book', function($q) use ($search) {
