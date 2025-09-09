@@ -16,7 +16,7 @@ class Rental extends Model
         'returned_at',
     ];
 
-    protected $appends = ['days_rented', 'is_overdue'];
+    protected $appends = ['days_rented'];
 
     public function book(): BelongsTo
     {

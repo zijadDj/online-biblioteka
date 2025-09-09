@@ -75,15 +75,9 @@ class RentalController extends Controller
         ];
 
         if ($overdue > 0) {
-            $rental->update([
-                'is_overdue' => true,
-                'days_overdue' => $overdue,
-            ]);
             Log::info("Rental {$rental->id} is overdue by {$overdue} days.");
-
             $response['overdue'] = $overdue . " days";
         }
-
 
         return response()->json($response, 200);
     }
