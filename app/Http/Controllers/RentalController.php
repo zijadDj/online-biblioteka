@@ -25,11 +25,8 @@ class RentalController extends Controller
 
         if ($userId = $request->input('user_id')) {
             $query->where('student_id', $userId);
-        } else {
-            $query->whereNull('returned_at');
         }
-
-
+        
         $perPage = $request->input('per_page', 20);
 
         $rentals = $query->paginate($perPage);
