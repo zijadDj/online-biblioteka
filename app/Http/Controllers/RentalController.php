@@ -18,8 +18,7 @@ class RentalController extends Controller
             ->whereNull('returned_at');
 
         if ($search = $request->input('book_title')) {
-            $query->whereNull('returned_at')
-                ->whereHas('book', function($q) use ($search) {
+            $query->whereHas('book', function($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%");
                 });
         }
