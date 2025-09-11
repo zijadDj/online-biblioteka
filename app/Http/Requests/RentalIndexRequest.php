@@ -14,8 +14,9 @@ class RentalIndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'search' => 'nullable|string|max:255',
             'user_id' => 'nullable|integer|exists:users,id',
+            'book_title' => 'nullable|string|max:255',
+            'book_id' => 'nullable|integer|exists:books,id',
             'per_page' => 'nullable|in:20,50,100',
         ];
     }

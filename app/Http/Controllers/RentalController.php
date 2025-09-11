@@ -17,10 +17,14 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'student', 'librarian'])
             ->whereNull('returned_at');
 
-        if ($search = $request->input('search')) {
+        if ($search = $request->input('book_title')) {
             $query->whereHas('book', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+                    $q->where('name', 'like', "%{$search}%");
+                });
+        }
+
+        if ($bookId = $request->input('book_id')) {
+            $query->where('book_id', $bookId);
         }
 
         if ($userId = $request->input('user_id')) {
@@ -94,4 +98,25 @@ class RentalController extends Controller
             'message' => 'Book rented successfully'
         ], 201);
     }
+
+    public function stats()
+    {
+        $rentalPolicy = Policy::where('name', 'Rental period')->first();
+        $days = $rentalPolicy?->period ?? 30;
+
+        $activeRentals = Rental::whereNull('returned_at')
+            ->where('rented_at', '>=', now()->subDays($days))
+            ->count();
+
+
+        $overdueRentals = Rental::whereNull('returned_at')
+            ->where('rented_at', '<', now()->subDays($days))
+            ->count();
+
+        return response()->json([
+            'active_rentals' => $activeRentals,
+            'overdue_rentals' => $overdueRentals,
+        ]);
+    }
+
 }
