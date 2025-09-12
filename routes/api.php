@@ -13,10 +13,6 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 
-Route::post('/rentals', [RentalController::class, 'store']);
-Route::get('/rentals/{id}', function ($id) {
-    return Rental::findOrFail($id);
-});
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -43,6 +39,10 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::apiResource('authors', AuthorController::class);
     Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
     Route::post('/books/{book}/discard', [BookController::class, 'discard']);
+
+    Route::get('/rentals/{rental}', [RentalController::class, 'show']);
+    Route::post('/rentals', [RentalController::class, 'store']);
+    Route::post('/rentals/{rental}/return', [RentalController::class, 'returnBook']);
 
 });
 
