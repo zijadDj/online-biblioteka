@@ -95,6 +95,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 
 
+
 ## Code Formatting with Laravel Pint
 
 This project uses [Laravel Pint](https://laravel.com/docs/pint) for code formatting.
@@ -128,3 +129,4 @@ bash
 ./vendor/bin/pest
 
 Make sure to write your tests inside the tests/Feature or tests/Unit directories.
+
