@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 
 class LibrarianPasswordResetController extends Controller
 {
-    public function request(Request $request)
+    public function sendResetLinkEmail(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => [
@@ -28,9 +28,8 @@ class LibrarianPasswordResetController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        $status = Password::broker('librarians')->sendResetLink(
-            $request->only('email')
-        );
+
+        $status = Password::sendResetLink($request->only('email'));
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json(['message' => 'Password reset link sent to email.']);
@@ -40,7 +39,8 @@ class LibrarianPasswordResetController extends Controller
             'message' => 'Failed to send password reset link.'
         ], 500);
     }
-    public function reset(Request $request)
+
+    public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => [
@@ -58,12 +58,14 @@ class LibrarianPasswordResetController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        $status = Password::broker('librarians')->reset(
+
+        $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($librarian, $password) {
-                $librarian->password = Hash::make($password);
-                $librarian->save();
-                Auth::guard('librarian')->login($librarian);
+            function ($user, $password) {
+                $user->password = Hash::make($password);
+                $user->save();
+
+                Auth::login($user);
             }
         );
 
@@ -77,9 +79,5 @@ class LibrarianPasswordResetController extends Controller
             'message' => 'Token is invalid or has expired.'
         ], 422);
     }
-
-    public function showForm()
-    {
-        return view('Password.reset-password');
-    }
 }
+

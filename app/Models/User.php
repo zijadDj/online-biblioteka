@@ -8,8 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
-class User extends Authenticatable
+class User extends Authenticatable implements CanResetPassword
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -19,7 +20,6 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-
 
     public const ROLE_LIBRARIAN = '1';
     public const ROLE_STUDENT = '0';
@@ -61,3 +61,4 @@ class User extends Authenticatable
         $this->notify(new ResetPassword($token));
     }
 }
+

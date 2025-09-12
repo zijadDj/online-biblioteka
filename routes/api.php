@@ -18,7 +18,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/create-librarian', [UserController::class, 'store']);
 
 // Rute za reset lozinke (OL-87)
-Route::post('/librarian/request-password-reset', [LibrarianPasswordResetController::class, 'request']);
+Route::post('/librarian/request-password-reset', [LibrarianPasswordResetController::class, 'sendResetLinkEmail']);
 Route::post('/librarian/reset-password', [LibrarianPasswordResetController::class, 'reset']);
 
 Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
