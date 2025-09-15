@@ -84,8 +84,8 @@ class RentalController extends Controller
             Rental::create([
                 'book_id' => $book->id,
                 'student_id' => $request->student_id,
-                'librarian_id' => $request->librarian_id,
-                'rented_at' => $request->rented_at,
+                'librarian_id' => auth()->id(),
+                'rented_at' => now(),
             ]);
         });
 

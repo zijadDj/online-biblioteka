@@ -11,10 +11,8 @@ class StoreRentalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id'      => ['required', 'exists:books,id'],
-            'student_id'   => ['required', 'exists:users,id'],
-            'librarian_id' => ['required', 'exists:users,id'],
-            'rented_at'    => ['required', 'date'],
+            'book_id'    => ['required', 'exists:books,id'],
+            'student_id' => ['required', 'exists:users,id'],
         ];
     }
 
