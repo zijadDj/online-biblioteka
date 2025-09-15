@@ -33,8 +33,11 @@ Route::middleware(['auth:sanctum', 'librarian'])->group(function () {
     Route::post('update-cover/{book}', [BookController::class, 'updateCover']);
     Route::apiResource('authors', AuthorController::class);
     Route::post('author-avatar/{author}', [AuthorController::class, 'updateAvatar']);
+    Route::post('/books/{book}/discard', [BookController::class, 'discard']);
+
     Route::get('/rentals/{rental}', [RentalController::class, 'show']);
     Route::post('/rentals', [RentalController::class, 'store']);
     Route::post('/rentals/{rental}/return', [RentalController::class, 'returnBook']);
+
 });
 

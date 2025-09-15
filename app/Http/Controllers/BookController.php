@@ -10,6 +10,8 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\DiscardedBook;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -174,4 +176,33 @@ class BookController extends Controller
             'message' => 'No image file provided'
         ], 400);
     }
+
+    public function discard(Request $request, Book $book)
+    {
+        if ($book->available_copies <= 0) {
+            return response()->json([
+                'message' => 'This book cannot be discarded as it does not exist in the inventory.'
+            ], 422);
+        }
+
+        $request->validate([
+            'reason' => 'nullable|string|max:255'
+        ]);
+
+        $book->available_copies -= 1;
+        $book->save();
+
+        DiscardedBook::create([
+            'book_id'      => $book->id,
+            'admin_id'     => Auth::id(),
+            'discarded_at' => now(),
+            'reason'       => $request->input('reason')
+        ]);
+
+        return response()->json([
+            'message' => 'Book discarded successfully.',
+            'remaining_copies' => $book->available_copies
+        ], 200);
+    }
+
 }

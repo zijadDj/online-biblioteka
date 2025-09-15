@@ -67,4 +67,9 @@ class User extends Authenticatable
         return $this->hasMany(Rental::class, 'librarian_id');
     }
 
+    public function discardedBooks()
+    {
+        return $this->hasMany(DiscardedBook::class, 'admin_id');
+    }
+
 }
